@@ -1,0 +1,112 @@
+package daos;
+
+import java.util.ArrayList;
+import java.util.List;
+import beans.StudentBean;
+import beans.TeacherBean;
+import util.DataBaseUtil;
+import java.sql.*;
+//建立学生对象与数据库的联系与操作
+public class StudentDao {
+	//向数据库中添加一个学生
+	public void addStudent(StudentBean student) {
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+
+			String sql=""+ "insert into student" +" (sid,sname,spassword,semail,tid) "+"values(?,?,?,?,?)";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, student.getSid());
+			psmt.setString(2, student.getSname());
+			psmt.setString(3, student.getSpassword());
+			psmt.setString(4, student.getSemail());
+			psmt.setInt(5, student.getTid());
+			psmt.execute();
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+	
+	}
+	//查找某个姓名的学生
+	public StudentBean searchStudent(String name) {
+		Connection conn=DataBaseUtil.getConnection();
+		StudentBean student=new StudentBean();
+		try {
+			
+			String sql=""+"select * from student where sname = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+	        psmt.setString(1,name);
+	        ResultSet rs = psmt.executeQuery();
+	        
+	        if (rs.next()) {
+	        	student.setStudent(rs.getInt("sid"),rs.getString("sname"), rs.getString("spassword"), rs.getString("semail"), rs.getInt("tid"));
+	        	return student;
+	        }
+		}
+		catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return student;
+	}
+	//获得某个老师号下的所有学生
+	public List<StudentBean> searchStudent1(int id) {
+		Connection conn=DataBaseUtil.getConnection();
+		List<StudentBean> student=new ArrayList<StudentBean>();
+		StudentBean stu=null;
+		try {
+			
+			String sql=""+"select * from student where tid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+	        psmt.setInt(1,id);
+	        ResultSet rs = psmt.executeQuery();
+	        while (rs.next()) {
+	        	stu=new StudentBean();
+	        	stu.setStudent(rs.getInt("sid"),rs.getString("sname"), rs.getString("spassword"), rs.getString("semail"), rs.getInt("tid"));
+	        	student.add(stu);
+	        }
+		}
+		catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return student;
+	}
+	//判断一个姓名的学生是否存在
+	public boolean isStudentExist(String name) {
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			
+			String sql=""+"select * from student where sname = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+	        psmt.setString(1,name);
+	        ResultSet rs = psmt.executeQuery();
+	        if (rs.next()) {
+	        	return true;
+	        }
+		}
+		catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return false;
+	}
+	//判断密码是否存在
+	public boolean isPasswordRight(String password,StudentBean student) {
+		if (password.equals(student.getSpassword())) {
+			return true;
+		}
+		return false;
+	}
+
+}
