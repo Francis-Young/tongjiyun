@@ -125,4 +125,28 @@ public class CommentDao {
         }
 
 	}
+	
+	//把一个评论标记为已删除
+	public void updateDeleted(int commentid,int deleted) {
+
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+
+		try {
+			//更新语句，更新deleted
+			String sql=""+"update comment set deleted = ? where commentid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, deleted);
+			psmt.setInt(2, commentid);
+			//执行更新语句
+			psmt.executeUpdate();
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+
+	}
 }
