@@ -5,15 +5,15 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class CommentDao {
-	//²åÈëÒ»¸öÆÀÂÛ
+	//æ’å…¥ä¸€ä¸ªè¯„è®º
 	public void addComment(Comment ct) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞcommentidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­commentidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
 			String sql=""+ "insert into comment" +" (commentid,poid,csid,preid,text,likenum,time,deleted) "+"values(default,?,?,?,?,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÌû×ÓºÅµÈÖµ
+			//è®¾å®šæ’å…¥çš„å¸–å­å·ç­‰å€¼
 			psmt.setInt(1, ct.getPoid());
 			psmt.setInt(2, ct.getCsid());
 			psmt.setInt(3, ct.getPreid());
@@ -21,7 +21,7 @@ public class CommentDao {
 			psmt.setInt(5, ct.getLikenum());
 			psmt.setTime(6, ct.getTime());
 			psmt.setInt(7, ct.getDeleted());
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -29,24 +29,24 @@ public class CommentDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İÆÀÂÛid²éÑ¯ÆÀÂÛ
+	//æ ¹æ®è¯„è®ºidæŸ¥è¯¢è¯„è®º
 
 	public Comment findCommentByCommentid(int commentid) {
-		//½¨Á¢Ò»¸öcomment¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªcommentå¯¹è±¡
 		Comment ct=new Comment();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 
 
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from comment where commentid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, commentid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øcomment¶ÔÏóÉè¶¨idµÈÊôĞÔÖµ
+				//ç»™commentå¯¹è±¡è®¾å®šidç­‰å±æ€§å€¼
 				ct.setCommentid(rs.getInt("commentid"));
 				ct.setPoid(rs.getInt("poid"));
 				ct.setCsid(rs.getInt("csid"));
@@ -64,25 +64,25 @@ public class CommentDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øcomment¶ÔÏó
+		//è¿”å›commentå¯¹è±¡
 		return ct;
 	}
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList findCommentByPoid(int poid) {//¸ù¾İÌû×ÓºÅ²éÑ¯ËùÓĞÆÀÂÛ
-		//½¨Á¢Ò»¸öcomment¶ÔÏó
+	public ArrayList findCommentByPoid(int poid) {//æ ¹æ®å¸–å­å·æŸ¥è¯¢æ‰€æœ‰è¯„è®º
+		//å»ºç«‹ä¸€ä¸ªcommentå¯¹è±¡
 		Comment ct=new Comment();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
-		ArrayList aList=new ArrayList<String>();//×¼±¸×é
+		ArrayList aList=new ArrayList<String>();//å‡†å¤‡ç»„
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from comment where poid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, poid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			while (rs.next()) {
-				//¸øcomment¶ÔÏóÉè¶¨idµÈÊôĞÔÖµ
+				//ç»™commentå¯¹è±¡è®¾å®šidç­‰å±æ€§å€¼
 				ct.setCommentid(rs.getInt("commentid"));
 				ct.setPoid(rs.getInt("poid"));
 				ct.setCsid(rs.getInt("csid"));
@@ -100,7 +100,29 @@ public class CommentDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øcomment¶ÔÏó
+		//è¿”å›commentå¯¹è±¡
 		return aList;
+	}
+	public void updateLikenumByCommentid(int commentid,int newlikenum) {//æ ¹æ®å¸–å­å·æ”¹å˜ç‚¹èµæ•°
+
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
+		Connection conn=DataBaseUtil.getConnection();
+
+		try {
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
+			String sql=""+"update comment set likenum = ? where commentid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, newlikenum);
+			psmt.setInt(2, commentid);
+			//æ‰§è¡Œæ›´æ–°è¯­å¥
+			psmt.executeUpdate();
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+
 	}
 }
