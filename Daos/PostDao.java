@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import util.DataBaseUtil;
 public class PostDao {
 
-	//²åÈëÒ»¸öÌû×Ó
+	//æ’å…¥ä¸€ä¸ªå¸–å­
 	public void addPost(Post post) {
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -31,7 +31,7 @@ public class PostDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İpoid²éÑ¯Ò»¸öÌû×Ó
+	//æ ¹æ®poidæŸ¥è¯¢ä¸€ä¸ªå¸–å­
 	public Post findPostByPoid(int postid) {
 		Post post=new Post();
 		Connection conn=DataBaseUtil.getConnection();
@@ -63,7 +63,7 @@ public class PostDao {
         }
 		return post;
 	}
-	//²éÕÒÄ³¸ö×¨Òµmid¡¢Ä³¸öÀàĞÍtypeÏÂµÄËùÓĞµÄÌû×Ó£¬ÒòÎªµ±µã¿ªÄ³¸ö×¨Òµ£¬Ìû×ÓÇø»áÏÔÊ¾ËùÓĞÌû×Ó£¬×ÊÁÏÇø»áÏÔÊ¾ËùÓĞ×ÊÁÏ
+	//æŸ¥æ‰¾æŸä¸ªä¸“ä¸šmidã€æŸä¸ªç±»å‹typeä¸‹çš„æ‰€æœ‰çš„å¸–å­ï¼Œå› ä¸ºå½“ç‚¹å¼€æŸä¸ªä¸“ä¸šï¼Œå¸–å­åŒºä¼šæ˜¾ç¤ºæ‰€æœ‰å¸–å­ï¼Œèµ„æ–™åŒºä¼šæ˜¾ç¤ºæ‰€æœ‰èµ„æ–™
 	public List<Post> getPostByMidType(int mid,int type) {
 		List<Post> post=new ArrayList<Post>();
 		Connection conn=DataBaseUtil.getConnection();
@@ -98,7 +98,7 @@ public class PostDao {
         }
 		return post;
 	}
-	//¸üĞÂÄ³¸öÌû×ÓµÄµãÔŞÊı
+	//æ›´æ–°æŸä¸ªå¸–å­çš„ç‚¹èµæ•°
 	public void updateLikenum(int likenum,Post post) {
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -106,6 +106,27 @@ public class PostDao {
 			String sql=""+"update post set likenum = ? where poid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, likenum);
+			psmt.setInt(2, post.getPoid());
+			psmt.execute();
+			
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		
+	}
+	
+	//æŠŠæŸä¸ªå¸–å­æ ‡è®°ä¸ºå·²åˆ é™¤
+	public void updateDeleted(int deleted,Post post) {
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			
+			String sql=""+"update post set deleted = ? where poid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, deleted);
 			psmt.setInt(2, post.getPoid());
 			psmt.execute();
 			
