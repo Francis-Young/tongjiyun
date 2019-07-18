@@ -4,20 +4,20 @@ import util.DataBaseUtil;
 import java.sql.*;
 
 public class ScoreDao {
-	//²åÈëÒ»¸ö´óÑ§Éú
+	//æ’å…¥ä¸€ä¸ªå¤§å­¦ç”Ÿ
 	public void addScore(Score sc) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞcsidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­csidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
 			String sql=""+ "insert into score" +" (scoreid,csid,resid,score) "+"values(default,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÓÃ»§ÃûµÈÖµ£¬ÃÜÂë
+			//è®¾å®šæ’å…¥çš„ç”¨æˆ·åç­‰å€¼ï¼Œå¯†ç 
 			psmt.setInt(1, sc.getCsid());
 			psmt.setInt(2, sc.getResid());
 			psmt.setInt(3, sc.getScore());
 
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -25,22 +25,22 @@ public class ScoreDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İÓÃ»§id:csidºÍ·¹µêid:resid²éÑ¯ÆÀ·Ö
+	//æ ¹æ®ç”¨æˆ·id:csidå’Œé¥­åº—id:residæŸ¥è¯¢è¯„åˆ†
 	public Score findScoreByCsidAndResid(int csid,int resid) {
-		//½¨Á¢Ò»¸öscore¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªscoreå¯¹è±¡
 		Score sc=new Score();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from score where csid = ? and resid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, csid);
 			psmt.setInt(2, resid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øscore¶ÔÏóÉè¶¨id£¬ÓÃ»§ÃûµÈÊôĞÔÖµ
+				//ç»™scoreå¯¹è±¡è®¾å®šidï¼Œç”¨æˆ·åç­‰å±æ€§å€¼
 				sc.setScoreid(rs.getInt("scoreid"));
 				sc.setCsid(rs.getInt("csid"));
 				sc.setResid(rs.getInt("resid"));
@@ -55,21 +55,21 @@ public class ScoreDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øscore¶ÔÏó
+		//è¿”å›scoreå¯¹è±¡
 		return sc;
 	}
-	//¸ù¾İ·¹µêid:resid²éÑ¯·¹µêÆ½¾ù·Ö
+	//æ ¹æ®é¥­åº—id:residæŸ¥è¯¢é¥­åº—å¹³å‡åˆ†
 	public int findAvscoreByResid(int resid) {
 
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		int avgScore=0;
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
-			String sql=""+"select avg(score) from score whereresid = ?";
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
+			String sql=""+"select avg(score) from score where resid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, resid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			avgScore=rs.getInt(1);
 		}catch(SQLException e) {
@@ -79,7 +79,7 @@ public class ScoreDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øscore¶ÔÏó
+		//è¿”å›scoreå¯¹è±¡
 		return avgScore;
 	}
 	
