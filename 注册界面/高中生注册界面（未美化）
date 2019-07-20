@@ -16,7 +16,7 @@
   </head>
   <body>
       <div class="container">
-            <form action="" method="POST">
+            <form action="${pageContext.request.contextPath}/signupServlet" method="POST">
                     <div class="form-group">
                       <label for="username">用户名</label>
                       <input type="text" class="form-control" id="username" placeholder="用户名">
