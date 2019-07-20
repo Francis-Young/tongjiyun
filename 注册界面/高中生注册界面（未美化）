@@ -31,8 +31,8 @@
                             <label class="radio-inline"><input type="radio" name="gender" value="female">女</label>
                     </div>
                     <div class="form-group">
-                      <label for="exampleInputFile">手机</label>
-                      <input type="tel" class="form-control" id="telephone">  
+                      <label for="exampleInputFile">邮箱</label>
+                      <input type="email" class="form-control" id="email">  
                     </div>
                     <div class="form-group">
                             <label for="testarea">高考区域</label>
