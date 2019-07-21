@@ -2,7 +2,7 @@ package util;
 import java.sql.*;
 public class DataBaseUtil {
 	public static Connection getConnection() {
-		String driverName="com.mysql.jdbc.Driver";
+		String driverName="com.mysql.cj.jdbc.Driver";
 		String dbURL="jdbc:mysql://rm-uf6oup3g7989vj77lmo.mysql.rds.aliyuncs.com:3306/tongjiyun";
 		String userName="root";
 		String userPwd="Cheng1230";
