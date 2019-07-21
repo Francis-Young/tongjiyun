@@ -15,9 +15,11 @@
 
     <!--link rel="stylesheet" href="css/bootstrap.css">-->
     <!-- 使用CDN引入能直接使用图标 -->
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+     <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
      
-    <link rel="stylesheet" href="css/jigsaw.css">
+    <!-- <link rel="stylesheet" href="css/jigsaw.css"> -->
     <style>
       body{
         /* background: url(images/绿水青山.jpg); */
@@ -51,9 +53,11 @@
         <br>
             <form action="${pageContext.request.contextPath}/signupServlet" method="POST" class="form-horizontal" onsubmit="return handlesubmit(this)" >
                     <div class="form-group">
-                      <label for="username" class="col-md-4 control-label">用户名</label>
+                      <label for="username" class="col-md-4 control-label" >用户名
+                      </label>
                       <div class="col-md-5">
-                          <input type="text" class="form-control" id="username" name="csname" placeholder="用户名">
+                          <input type="text" class="form-control" id="username" name="csname" placeholder="用户名" onblur="checkValidate2(this.value)"> 
+                          <span class="msg" id="cardId_msg2">*必填项</span>
                       </div>  
                     </div>
                     <div class="form-group">
@@ -71,7 +75,7 @@
                     <div class="form-group">
                       <label for="email1" class="col-md-4 control-label">邮箱</label>
                       <div class="col-md-5">
-                          <input type="email" class="form-control" name="csemail" id="email1">  
+                          <input type="email" class="form-control" name="csemail" id="email1"><span>*校园邮箱应含有：edu.cn</span>  
                       </div>
                     </div>
                     <div class="form-group">
@@ -110,12 +114,13 @@
                      <div class="form-group">
                         <label for="schoolnum" class="col-md-4 control-label">学号</label>
                       <div class="col-md-5">
-                          <input type="number" class="form-control" name="csnum" id="schoolnum">  
+                          <input type="number" class="form-control" name="csnum" id="schoolnum" onblur="checkValidate1(this.value)"> 
+                          <span class="msg" id="cardId_msg1">*必填项</span> 
                       </div>    
                     </div>
                     <div class="form-group">
+                    
                         <!-- 将“同济大学”赋给变量并隐藏这一输入框 -->
-               
                           <input type="text" name="csuniname" id="schoolname" hidden="true" value="同济大学" >  
                         
                     </div>
@@ -126,7 +131,7 @@
                       </div>    
                     </div>
                       <div class="row">
-                             <button type="submit" class="btn btn-default btn-lg center-block" name="submit" value="提交" >提交</button>  
+                             <button type="submit" class="btn btn-default btn-lg center-block" name="submit" value="提交" disabled="disabled" id="update">提交</button>  
                              <!-- <button type="submit" class="btn btn-default btn-lg center-block" name="send" value="发送验证码" disabled="true" id="send1">发送验证码</button> -->
                       </div>
 
@@ -135,6 +140,7 @@
             </form>
     </div>
     <!-- 判断输入的有效性 -->
+    <script src="js/jquery.js"></script>
     <script>
            function isValidateEmail(email){
              var patt = /edu.cn/;
@@ -177,8 +183,111 @@
             
             return true;
           }
+          
+          //异步验证
+          //console.log("有效");
+          //判断学号是否重复
+          function checkValidate1(val){
+      	    var msg1 = $("#cardId_msg1");	//JQuery获取
+      	    var info = "";	//提示信息
+      		    $.ajax({
+      		        type: "POST",
+      		        url: "${pageContext.request.contextPath}/verifycsnum", //链接指向地址
+      		        dataType:"json",
+      		        data: {"csnum":val},  //形成一对key-value，提交对象可以通过request.getParameter("cardId");获得val值
+      		        success: function(data){    //提交成功后调用的方法
+      	                console.log(data);
+      		        	if(data.toString()=="true"){    //后台返回表示重名
+      	                    info = "*已存在";  //提示信息
+      	                    msg1.css("color", "red");    //修改样式
+      	                    msg1.html(info); //显示提示信息
+      	                    $("#update").attr("disabled", true);    //按钮disabled
+      	                    //console.log("已存在");
+      	                }else if(data.toString()=="false") {
+      	                    info = "*通过";
+      	                    msg1.css("color", "green");
+      	                    msg1.html(info);
+      	                    $("#update").removeAttr("disabled");	//取消按钮disabled
+      	                    //console.log("有效");
+      	                }
+      		        else {alert("ajax未执行！")}
+      		        },
+      		        
+      		    });
+      		}  //按钮disabled
+      		
+      		//判断用户名是否重复
+      		function checkValidate2(val){
+          	    var msg2 = $("#cardId_msg2");	//JQuery获取
+          	    var info = "";	//提示信息
+          		    $.ajax({
+          		        type: "POST",
+          		        url: "${pageContext.request.contextPath}/verifycsname", //链接指向地址
+          		        dataType:"json",
+          		        data: {"csname":val},  //形成一对key-value，提交对象可以通过request.getParameter("cardId");获得val值
+          		        success: function(data){    //提交成功后调用的方法
+          	                console.log(data);
+          		        	if(data.toString()=="true"){    //后台返回表示重名
+          	                    info = "*已存在";  //提示信息
+          	                    msg2.css("color", "red");    //修改样式
+          	                    msg2.html(info); //显示提示信息
+          	                    $("#update").attr("disabled", true);    //按钮disabled
+          	                    //console.log("已存在");
+          	                }else if(data.toString()=="false") {
+          	                    info = "*通过";
+          	                    msg2.css("color", "green");
+          	                    msg2.html(info);
+          	                    $("#update").removeAttr("disabled");	//取消按钮disabled
+          	                    //console.log("有效");
+          	                }
+          		        else {alert("ajax未执行！")}
+          		        },
+          		        
+          		    });
+          		}  //按钮disabled
+      		/*var XmlHttp;
+      		function creatXMLHttpRequest(){
+      			Xmlhttp=null;
+      			if (window.XMLHttpRequest)
+      			  {// code for all new browsers
+      			  Xmlhttp=new XMLHttpRequest();
+      			  }
+      			else if (window.ActiveXObject)
+      			  {// code for IE5 and IE6
+      			  Xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+      			  }
+      			if (Xmlhttp==null)
+      			  {
+      				alert("Your browser does not support XMLHTTP.");
+      			  }
+      			return XmlHttp;
+      			}
+      		
+      		function handleStateChange(){
+      	    	if(XmlHttp.readyState==4){
+      	    		
+      	    		if(XmlHttp.status==200){
+      	    			 $("#update").removeAttr("disabled");
+      	    		}
+      	    	}
+      	    }
 
-    </script>
+      	    function checkValidate(val){
+      	    	console.log(val);
+      			var para="csname="+val;
+      			creatXMLHttpRequest();
+      			XmlHttp.onreadystatechange=handleStateChange;
+      			XmlHttp.open("POST","${pageContext.request.contextPath}/verifycsname",true);
+      			XmlHttp.setRequestHeader("Content-type","application/x-www-form-urlencoded;");
+      			XmlHttp.send(para);
+      		}*/
+      	    
+      	    
+      		
+      		
+         </script>
+
+    
     <!-- 图片验证码 -->
    
   </body>
