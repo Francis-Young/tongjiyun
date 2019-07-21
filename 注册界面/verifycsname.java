@@ -15,12 +15,13 @@ public void doPost(HttpServletRequest req, HttpServletResponse resp) throws Serv
 	String csnum = req.getParameter("csnum");
 	resp.setContentType("text;charset=utf-8");
 	resp.setCharacterEncoding("UTF-8");
+	System.out.println(csnum);
 	PrintWriter out = resp.getWriter();
 	if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
     {
-        out.print("学号已存在！");
+        out.print("脩搂潞脜脪脩麓忙脭脷拢隆");
     }
-	else out.print("学号可用");
+	else out.print("脩搂潞脜驴脡脫脙");
 }
 
 }
