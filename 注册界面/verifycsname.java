@@ -12,16 +12,17 @@ import daos.CollegestudentDao;
 public class verifycsname
 {
 public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-	String csnum = req.getParameter("csnum");
+	String csname = req.getParameter("csname");
+	csname = new String(csname.getBytes("ISO-8859-1"),"UTF-8"); //中文解码转换
 	resp.setContentType("text;charset=utf-8");
 	resp.setCharacterEncoding("UTF-8");
-	System.out.println(csnum);
 	PrintWriter out = resp.getWriter();
-	if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
+	System.out.println(csname);
+	if(CollegestudentDao.isCsNameExist(csname))
     {
-        out.print("学号已存在！");
+        out.print("true");
     }
-	else out.print("学号可用");
+	else out.print("false");
 }
 
 }
