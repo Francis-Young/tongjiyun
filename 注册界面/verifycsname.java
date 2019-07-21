@@ -13,7 +13,6 @@ public class verifycsname
 {
 public void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 	String csname = req.getParameter("csname");
-	csname = new String(csname.getBytes("ISO-8859-1"),"UTF-8"); //中文解码转换
 	resp.setContentType("text;charset=utf-8");
 	resp.setCharacterEncoding("UTF-8");
 	PrintWriter out = resp.getWriter();
