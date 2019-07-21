@@ -1,16 +1,20 @@
-package com.lewei.test;
+package servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import beans.Collegestudent;
+import beans.Highschoolstudent;
+import daos.CollegestudentDao;
+import daos.HighschoolstudentDao;
+
 /**
-
  * Servlet implementation class signupServlet
-
  */
 
 @WebServlet("/signupServlet")
@@ -22,9 +26,7 @@ public class signupServlet extends HttpServlet {
        
 
     /**
-
      * @see HttpServlet#HttpServlet()
-
      */
 
     public signupServlet() {
@@ -38,9 +40,7 @@ public class signupServlet extends HttpServlet {
 
 
 	/**
-
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-
 	 */
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -51,27 +51,27 @@ public class signupServlet extends HttpServlet {
 
 		//System.out.println('t');
 
-		//»ñÈ¡ÇëÇóµÄĞĞÎª
+		//è·å–è¯·æ±‚çš„è¡Œä¸º
 
 		String action = req.getParameter("action");
 
 		System.out.println(req.getParameter("action"));
 
-		//¸ù¾İ²»Í¬µÄactionÇëÇó£¬½øÈë²»Í¬µÄ·½·¨
+		//æ ¹æ®ä¸åŒçš„actionè¯·æ±‚ï¼Œè¿›å…¥ä¸åŒçš„æ–¹æ³•
 
 		switch (action)
 
 		{
 
-			case "login":
+			case "hsSIGNUP":
 
-				//login(req,resp);
+				hssignup(req,resp);
 
 				break;
 
-			case "SIGNUP":
+			case "csSIGNUP":
 
-				signup(req,resp);
+				cssignup(req,resp);
 
 				break;
 
@@ -86,9 +86,7 @@ public class signupServlet extends HttpServlet {
 
 
 	/**
-
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-
 	 */
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -101,19 +99,84 @@ public class signupServlet extends HttpServlet {
 
 	
 
-	private void signup(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+	private void cssignup(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
 
 	{
 
 		// TODO Auto-generated method stub
 
-		System.out.println("½øÈë×¢²áÒµÎñ£¡");
+		System.out.println("è¿›å…¥æ³¨å†Œä¸šåŠ¡ï¼");
+
+		req.setCharacterEncoding("GB2312");
+
+		String csname = req.getParameter("csname");
+
+		csname = new String(csname.getBytes("ISO-8859-1"),"UTF-8"); //ä¸­æ–‡è§£ç è½¬æ¢
+
+		String cspassword = req.getParameter("cspassword");
+
+		String cssex = req.getParameter("cssex");	
+
+		String csyear = req.getParameter("csyear");
+		
+		String csemail = req.getParameter("csemail");
+		
+		String cstele = req.getParameter("cstele");
+		
+		String csnum = req.getParameter("csnum");
+
+		String csuniname = req.getParameter("csuniname");
+		
+		csuniname = new String(csuniname.getBytes("ISO-8859-1"),"UTF-8"); 
+		
+		String mname = req.getParameter("mname");
+		
+		mname = new String(mname.getBytes("ISO-8859-1"),"UTF-8"); 
+		
+
+
+        //å¦‚æœuserå­˜åœ¨ï¼Œé‚£å°±æç¤ºç”¨æˆ·åé”™è¯¯
+
+        if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
+        {
+            req.setAttribute("err", "å­¦å·å·²å­˜åœ¨!");
+            req.getRequestDispatcher("signup2.jsp").forward(req,resp);//è¯·æ±‚è½¬å‘
+            return;
+        }
+        else
+        {
+        	Collegestudent cs = new Collegestudent();
+        	cs.setCsemail(csemail);;
+        	cs.setCsyear(Integer.valueOf(csyear));
+        	cs.setCsname(csname);
+        	cs.setCspassword(cspassword);
+        	cs.setCstele(cstele);
+        	cs.setCssex(Integer.valueOf(cssex));
+        	cs.setCsnum(Integer.valueOf(csnum));
+        	cs.setCsuniname(csuniname);
+        	cs.setMname(mname);
+        	CollegestudentDao.addCollegestudent(cs);
+        }
+        //resp.sendRedirect("http://localhost:8080/TomcatTest/login.jsp");//è½¬åˆ°ç™»å½•é¡µé¢
+        
+
+        
+
+	}
+
+	private void hssignup(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+
+	{
+
+		// TODO Auto-generated method stub
+
+		System.out.println("è¿›å…¥æ³¨å†Œä¸šåŠ¡ï¼");
 
 		req.setCharacterEncoding("GB2312");
 
 		String hsname = req.getParameter("hsname");
 
-		hsname = new String(hsname.getBytes("ISO-8859-1"),"UTF-8"); //ÖĞÎÄ½âÂë×ª»»
+		hsname = new String(hsname.getBytes("ISO-8859-1"),"UTF-8"); //ä¸­æ–‡è§£ç è½¬æ¢
 
 		String hspassword = req.getParameter("hspassword");
 
@@ -133,48 +196,36 @@ public class signupServlet extends HttpServlet {
 
 		System.out.println(hsname+hspassword+hssex+hsgaokao_year+hsphone+hsregion+hschoice);
 
-		//String inseresult=mgtest.logupdb(usernameString, password, email, gender, grade);//×ª·¢µ½mgtestÓëÊı¾İ¿â½»»¥
+        //å¦‚æœuserå­˜åœ¨ï¼Œé‚£å°±æç¤ºç”¨æˆ·åé”™è¯¯
 
-        //Èç¹ûuser´æÔÚ£¬ÄÇ¾ÍÌáÊ¾ÓÃ»§Ãû´íÎó
-
-/*        if(inseresult=="exist")
-
+        if(HighschoolstudentDao.checkHighschoolstudentByHsname(hsname))
         {
-
-            req.setAttribute("err", "ÓÃ»§ÃûÒÑ´æÔÚ!");
-
-            req.getRequestDispatcher("logup.jsp").forward(req,resp);//ÇëÇó×ª·¢
-
+            req.setAttribute("err", "ç”¨æˆ·åå·²å­˜åœ¨!");
+            req.getRequestDispatcher("signup.jsp").forward(req,resp);//è¯·æ±‚è½¬å‘
             return;
-
         }
-
-        JOptionPane.showMessageDialog(null, "×¢²á³É¹¦£¡");//µ¯´°ÌáÊ¾
-
-       resp.sendRedirect("http://localhost:8080/TomcatTest/login.jsp");//×ªµ½µÇÂ¼Ò³Ãæ
-
- */        
+        else
+        {
+        	Highschoolstudent hs = new Highschoolstudent();
+        	hs.setHschoice(hschoice);
+        	hs.setHsgaokao_year(Integer.valueOf(hsgaokao_year));
+        	hs.setHsname(hsname);
+        	hs.setHspassword(hspassword);
+        	hs.setHsphone(hsphone);
+        	hs.setHsregion(hsregion);
+        	hs.setHssex(Integer.valueOf(hssex));
+        	HighschoolstudentDao.addHighschoolstudent(hs);
+        }
+        //resp.sendRedirect("http://localhost:8080/TomcatTest/login.jsp");//è½¬åˆ°ç™»å½•é¡µé¢
+        
 
         
 
 	}
 
-
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
 }
+	
+
+	
+
+	
