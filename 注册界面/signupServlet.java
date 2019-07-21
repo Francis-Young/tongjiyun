@@ -133,18 +133,6 @@ public class signupServlet extends HttpServlet {
 		
 		mname = new String(mname.getBytes("ISO-8859-1"),"UTF-8"); 
 		
-
-
-        //如果user存在，那就提示用户名错误
-
-        if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
-        {
-            req.setAttribute("err", "学号已存在!");
-            req.getRequestDispatcher("signup2.jsp").forward(req,resp);//请求转发
-            return;
-        }
-        else
-        {
         	Collegestudent cs = new Collegestudent();
         	cs.setCsemail(csemail);;
         	cs.setCsyear(Integer.valueOf(csyear));
@@ -156,7 +144,7 @@ public class signupServlet extends HttpServlet {
         	cs.setCsuniname(csuniname);
         	cs.setMname(mname);
         	CollegestudentDao.addCollegestudent(cs);
-        }
+
         //resp.sendRedirect("http://localhost:8080/TomcatTest/login.jsp");//转到登录页面
         
 
@@ -196,16 +184,7 @@ public class signupServlet extends HttpServlet {
 
 		System.out.println(hsname+hspassword+hssex+hsgaokao_year+hsphone+hsregion+hschoice);
 
-        //如果user存在，那就提示用户名错误
 
-        if(HighschoolstudentDao.checkHighschoolstudentByHsname(hsname))
-        {
-            req.setAttribute("err", "用户名已存在!");
-            req.getRequestDispatcher("signup.jsp").forward(req,resp);//请求转发
-            return;
-        }
-        else
-        {
         	Highschoolstudent hs = new Highschoolstudent();
         	hs.setHschoice(hschoice);
         	hs.setHsgaokao_year(Integer.valueOf(hsgaokao_year));
@@ -214,12 +193,7 @@ public class signupServlet extends HttpServlet {
         	hs.setHsphone(hsphone);
         	hs.setHsregion(hsregion);
         	hs.setHssex(Integer.valueOf(hssex));
-        	HighschoolstudentDao.addHighschoolstudent(hs);
-        }
-        //resp.sendRedirect("http://localhost:8080/TomcatTest/login.jsp");//转到登录页面
-        
-
-        
+        	HighschoolstudentDao.addHighschoolstudent(hs);        
 
 	}
 
