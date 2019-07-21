@@ -32,7 +32,7 @@ public class ScoreDao {
 		//建立数据库连接
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//查询语句，根据学号查询
+			
 			String sql=""+"select * from score where csid = ? and resid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, csid);
@@ -65,7 +65,7 @@ public class ScoreDao {
 		Connection conn=DataBaseUtil.getConnection();
 		int avgScore=0;
 		try {
-			//查询语句，根据学号查询
+			//查询语句，根据resid查询
 			String sql=""+"select avg(score) from score where resid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, resid);
