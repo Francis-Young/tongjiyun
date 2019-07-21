@@ -5,7 +5,7 @@ import java.sql.*;
 
 public class CollegestudentDao {
 	//插入一个大学生
-	public void addCollegestudent(Collegestudent cs) {
+	public static void addCollegestudent(Collegestudent cs) {
 		//建立与数据库的连接
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -31,7 +31,7 @@ public class CollegestudentDao {
         }
 	}
 	//根据学号（不是id）查询大学生
-	public Collegestudent findCollegestudentByNum(int num) {
+	public static Collegestudent findCollegestudentByNum(int num) {
 		//建立一个collegestudent对象
 		Collegestudent cs=new Collegestudent();
 		//建立数据库连接
@@ -67,7 +67,7 @@ public class CollegestudentDao {
 		return cs;
 	}
 	//判断某学号学生是否存在，若存在则返回true，若不存在返回false
-	public boolean isCsNumExist(int num) {
+	public static boolean isCsNumExist(int num) {
 		//建立数据库连接
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -91,7 +91,7 @@ public class CollegestudentDao {
 		return false;
 	}
 	//判断某校园邮箱是否存在，若存在则返回true，若不存在返回false
-	public boolean isCsemailExist(String email) {
+	public static boolean isCsemailExist(String email) {
 		//建立数据库连接
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -115,7 +115,7 @@ public class CollegestudentDao {
 		return false;
 	}
 	//判断学生密码是否正确
-	public boolean isPasswordRight (String password,Collegestudent cs) {
+	public static boolean isPasswordRight (String password,Collegestudent cs) {
 		if (password.equals(cs.getCspassword())) {
 			return true;
 		}
