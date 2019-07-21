@@ -10,6 +10,13 @@ public class Collegestudent {
 	private int csyear;
 	private String csemail=new String();
 	private String cstele=new String();
+	private String csuniname=new String();
+	public String getCsuniname() {
+		return csuniname;
+	}
+	public void setCsuniname(String csuniname) {
+		this.csuniname = csuniname;
+	}
 	public int getCsid() {
 		return csid;
 	}
