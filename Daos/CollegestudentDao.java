@@ -4,15 +4,15 @@ import util.DataBaseUtil;
 import java.sql.*;
 
 public class CollegestudentDao {
-	//²åÈëÒ»¸ö´óÑ§Éú
+	//æ’å…¥ä¸€ä¸ªå¤§å­¦ç”Ÿ
 	public void addCollegestudent(Collegestudent cs) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞcsidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
-			String sql=""+ "insert into collegestudent" +" (csid,csname,cspassword,cssex,csnum,mname,csyear,csemail,cstele) "+"values(default,?,?,?,?,?,?,?,?)";
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­csidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
+			String sql=""+ "insert into collegestudent" +" (csid,csname,cspassword,cssex,csnum,mname,csyear,csemail,cstele,csuniname) "+"values(default,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÓÃ»§ÃûµÈÖµ£¬ÃÜÂë
+			//è®¾å®šæ’å…¥çš„ç”¨æˆ·åç­‰å€¼ï¼Œå¯†ç 
 			psmt.setString(1, cs.getCsname());
 			psmt.setString(2, cs.getCspassword());
 			psmt.setInt(3, cs.getCssex());
@@ -21,7 +21,8 @@ public class CollegestudentDao {
 			psmt.setInt(6, cs.getCsyear());
 			psmt.setString(7, cs.getCsemail());
 			psmt.setString(8, cs.getCstele());
-			//Ö´ĞĞ²åÈëÓï¾ä
+			psmt.setString(8, cs.getCsuniname());
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -29,21 +30,21 @@ public class CollegestudentDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İÑ§ºÅ£¨²»ÊÇid£©²éÑ¯´óÑ§Éú
+	//æ ¹æ®å­¦å·ï¼ˆä¸æ˜¯idï¼‰æŸ¥è¯¢å¤§å­¦ç”Ÿ
 	public Collegestudent findCollegestudentByNum(int num) {
-		//½¨Á¢Ò»¸öcollegestudent¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªcollegestudentå¯¹è±¡
 		Collegestudent cs=new Collegestudent();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from collegestudent where csnum = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, num);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øcollegestudent¶ÔÏóÉè¶¨id£¬ÓÃ»§ÃûµÈÊôĞÔÖµ
+				//ç»™collegestudentå¯¹è±¡è®¾å®šidï¼Œç”¨æˆ·åç­‰å±æ€§å€¼
 				cs.setCsid(rs.getInt("csid"));
 				cs.setCsname(rs.getString("csname"));
 				cs.setCspassword(rs.getString("cspassword"));
@@ -53,7 +54,7 @@ public class CollegestudentDao {
 				cs.setCsyear(rs.getInt("csyear"));
 				cs.setCsemail(rs.getString("csemail"));
 				cs.setCstele(rs.getString("cstele"));
-				
+				cs.setCsuniname(rs.getString("csuniname"));
 			}
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -62,19 +63,19 @@ public class CollegestudentDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øcollegestudent¶ÔÏó
+		//è¿”å›collegestudentå¯¹è±¡
 		return cs;
 	}
-	//ÅĞ¶ÏÄ³Ñ§ºÅÑ§ÉúÊÇ·ñ´æÔÚ£¬Èô´æÔÚÔò·µ»Øtrue£¬Èô²»´æÔÚ·µ»Øfalse
+	//åˆ¤æ–­æŸå­¦å·å­¦ç”Ÿæ˜¯å¦å­˜åœ¨ï¼Œè‹¥å­˜åœ¨åˆ™è¿”å›trueï¼Œè‹¥ä¸å­˜åœ¨è¿”å›false
 	public boolean isCsNumExist(int num) {
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from collegestudent where csnum = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, num);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
 				return true;
@@ -89,16 +90,16 @@ public class CollegestudentDao {
         }
 		return false;
 	}
-	//ÅĞ¶ÏÄ³Ğ£Ô°ÓÊÏäÊÇ·ñ´æÔÚ£¬Èô´æÔÚÔò·µ»Øtrue£¬Èô²»´æÔÚ·µ»Øfalse
+	//åˆ¤æ–­æŸæ ¡å›­é‚®ç®±æ˜¯å¦å­˜åœ¨ï¼Œè‹¥å­˜åœ¨åˆ™è¿”å›trueï¼Œè‹¥ä¸å­˜åœ¨è¿”å›false
 	public boolean isCsemailExist(String email) {
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İĞ£Ô°ÓÊÏä²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®æ ¡å›­é‚®ç®±æŸ¥è¯¢
 			String sql=""+"select * from collegestudent where csemail = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setString(1, email);;
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
 				return true;
@@ -113,7 +114,7 @@ public class CollegestudentDao {
         }
 		return false;
 	}
-	//ÅĞ¶ÏÑ§ÉúÃÜÂëÊÇ·ñÕıÈ·
+	//åˆ¤æ–­å­¦ç”Ÿå¯†ç æ˜¯å¦æ­£ç¡®
 	public boolean isPasswordRight (String password,Collegestudent cs) {
 		if (password.equals(cs.getCspassword())) {
 			return true;
