@@ -19,9 +19,9 @@ public void doPost(HttpServletRequest req, HttpServletResponse resp) throws Serv
 	PrintWriter out = resp.getWriter();
 	if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
     {
-        out.print("Ñ§ºÅÒÑ´æÔÚ£¡");
+        out.print("学号已存在！");
     }
-	else out.print("Ñ§ºÅ¿ÉÓÃ");
+	else out.print("学号可用");
 }
 
 }
