@@ -59,7 +59,7 @@
                       <label for="username" class="col-md-4 control-label">用户名</label>
                       <div class="col-md-5">
                           <input type="text" class="form-control" id="username" name="hsname" placeholder="用户名" onblur="checkValidate(this.value)"> 
-                          <span class="msg" id="cardId_msg">*必填项</span> >
+                          <span class="msg" id="cardId_msg">*必填项</span> 
                       </div>  
                     </div>
                     <div class="form-group">
@@ -202,15 +202,15 @@
 
     </script>
     <!-- 图片验证码 -->
-    <script src="{pageContext.request.ContextPath}/js/jigsaw.js"></script>
+    <!-- <script src="{pageContext.request.ContextPath}/js/jigsaw.js"></script> -->
     <script type="text/javascript">
     /*jigsaw.init(document.getElementById('captcha'), function () {
       document.getElementById('msg').innerHTML = '登录成功'
       ;
     })*/
     
-    function checkValidate1(val){
-  	    var msg1 = $("#cardId_msg");	//JQuery获取
+    function checkValidate(val){
+  	    var msg = $("#cardId_msg");	//JQuery获取
   	    var info = "";	//提示信息
   		    $.ajax({
   		        type: "POST",

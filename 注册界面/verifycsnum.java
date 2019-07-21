@@ -1,29 +1,34 @@
 package com.lewei.test;
 
 import java.io.IOException;
-
-import java.io.PrintWriter;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-
 import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+
+import java.io.PrintWriter;
+
 import daos.CollegestudentDao;
 
+import javax.servlet.ServletException;
 
+import javax.servlet.http.HttpServletRequest;
+
+import javax.servlet.http.HttpServletResponse;
 /**
- * Servlet implementation class verifycsname
+ * Servlet implementation class verifycsnum
  */
-@WebServlet("/verifycsname")
-public class verifycsname extends HttpServlet {
+@WebServlet("/verifycsnum")
+public class verifycsnum extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public verifycsname() {
+    public verifycsnum() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,23 +46,28 @@ public class verifycsname extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String csname = req.getParameter("csname");
+		//System.out.println("etetttw3");
+			String csnum = req.getParameter("csnum");
 
-		resp.setContentType("text;charset=utf-8");
+			resp.setContentType("text;charset=utf-8");
 
-		resp.setCharacterEncoding("UTF-8");
+			resp.setCharacterEncoding("UTF-8");
 
-		PrintWriter out = resp.getWriter();
+			//System.out.println(csnum);
 
-		if(CollegestudentDao.isCsNameExist(csname))
+			PrintWriter out = resp.getWriter();
 
-	    {
+			if(CollegestudentDao.isCsNumExist(Integer.valueOf(csnum)))
 
-	        out.print("true");
+		    {
+		        out.print("true");
+		    }
 
-	    }
+			else out.print("false");
 
-		else out.print("false");
+		}
+
+		
 	}
 
-}
+
