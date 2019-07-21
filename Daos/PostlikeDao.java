@@ -7,18 +7,18 @@ import java.sql.*;
 
 
 public class PostlikeDao {
-	//²åÈëÒ»¸öÆÀÂÛ
+	//æ’å…¥ä¸€ä¸ªè¯„è®º
 	public void addPostlike(Postlike pe) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞpolikeidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­polikeidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
 			String sql=""+ "insert into postlike" +" (polikeid,poid,sid) "+"values(default,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÌû×ÓºÅµÈÖµ
+			//è®¾å®šæ’å…¥çš„å¸–å­å·ç­‰å€¼
 			psmt.setInt(1, pe.getPoid());
 			psmt.setInt(2, pe.getSid());
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -26,23 +26,23 @@ public class PostlikeDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İµãÔŞid²éÑ¯µãÔŞ
+	//æ ¹æ®ç‚¹èµidæŸ¥è¯¢ç‚¹èµ
 
 	public Postlike findpostlikeByPostlikeid(int polikeid) {
-		//½¨Á¢Ò»¸öpostlike¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªpostlikeå¯¹è±¡
 		Postlike pe=new Postlike();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®ç‚¹èµå·æŸ¥è¯¢
 			String sql=""+"select * from postlike where postlikeid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, polikeid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øcomment¶ÔÏóÉè¶¨idµÈÊôĞÔÖµ
+				//ç»™å¯¹è±¡è®¾å®šidç­‰å±æ€§å€¼
 				pe.setPolikeid(rs.getInt("polikeid"));
 				pe.setPoid(rs.getInt("poid"));
 				pe.setSid(rs.getInt("sid"));
@@ -55,21 +55,21 @@ public class PostlikeDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»ØPostlike¶ÔÏó
+		//è¿”å›Postlikeå¯¹è±¡
 		return pe;
 	}
 
-	public int countPostlikeByPoid(int poid) {//¸ù¾İÌû×ÓºÅ²éÑ¯ËùÓĞÆÀÂÛ
+	public int countPostlikeByPoid(int poid) {//æ ¹æ®å¸–å­å·æŸ¥è¯¢æ‰€æœ‰ç‚¹èµ
 
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		int countPostlike=0;
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select count(*)  from postlike where poid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, poid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			countPostlike=rs.getInt(1);
 		}catch(SQLException e) {
@@ -79,7 +79,7 @@ public class PostlikeDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»Øcomment¶ÔÏó
+		//è¿”å›å¸–å­ç‚¹èµæ€»æ•°
 		return countPostlike;
 	}
 }
