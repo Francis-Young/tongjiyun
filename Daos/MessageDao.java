@@ -5,19 +5,19 @@ import java.sql.*;
 
 
 public class MessageDao {
-	//²åÈëÒ»¸öÆÀÂÛ
+	//æ’å…¥ä¸€ä¸ªç§ä¿¡
 	public void addMessage(Message ms) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞmessageidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­messageidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
 			String sql=""+ "insert into message" +" (messageid,sendid,recieveid,text) "+"values(default,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÌû×ÓºÅµÈÖµ
+			//è®¾å®šæ’å…¥çš„ç§ä¿¡å·ç­‰å€¼
 			psmt.setInt(1, ms.getSendid());
 			psmt.setInt(2, ms.getRecieveid());
 			psmt.setString(3, ms.getText());
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -25,23 +25,23 @@ public class MessageDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İÆÀÂÛid²éÑ¯ÆÀÂÛ
+	//æ ¹æ®ç§ä¿¡idæŸ¥è¯¢ç§ä¿¡
 
 	public Message findmessageByMessageid(int messageid) {
-		//½¨Á¢Ò»¸öMessage¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªMessageå¯¹è±¡
 		Message ms=new Message();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®ç§ä¿¡idæŸ¥è¯¢
 			String sql=""+"select * from message where messageid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, messageid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øcomment¶ÔÏóÉè¶¨idµÈÊôĞÔÖµ
+				//ç»™å¯¹è±¡è®¾å®šidç­‰å±æ€§å€¼
 				ms.setMessageid(rs.getInt("messageid"));
 				ms.setSendid(rs.getInt("sendid"));
 				ms.setRecieveid(rs.getInt("recieveid"));
@@ -54,7 +54,7 @@ public class MessageDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»ØMessage¶ÔÏó
+		//è¿”å›Messageå¯¹è±¡
 		return ms;
 	}
 }
