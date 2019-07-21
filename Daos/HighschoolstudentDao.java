@@ -5,15 +5,15 @@ import java.sql.*;
 
 
 public class HighschoolstudentDao {
-	//²åÈëÒ»¸öÆÀÂÛ
+	//æ’å…¥ä¸€ä¸ªè¯„è®º
 	public void addHighschoolstudent(Highschoolstudent hs) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²åÈëÓï¾ä£¬ÆäÖĞhsidÎª×ÔÔö£¬ËùÒÔÖ»ÓÃĞ´default
+			//æ’å…¥è¯­å¥ï¼Œå…¶ä¸­hsidä¸ºè‡ªå¢ï¼Œæ‰€ä»¥åªç”¨å†™default
 			String sql=""+ "insert into highschoolstudent" +" (hsid,hspassword,hsname,hsphone,hssex,hsregion,hsgaokao_year,hschoice) "+"values(default,?,?,?,?,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÌû×ÓºÅµÈÖµ
+			//è®¾å®šæ’å…¥çš„è´¦å·ç­‰å€¼
 			psmt.setString(1, hs.getHspassword());
 			psmt.setString(2, hs.getHsname());
 			psmt.setString(3, hs.getHsphone());
@@ -21,7 +21,7 @@ public class HighschoolstudentDao {
 			psmt.setString(5, hs.getHsregion());
 			psmt.setInt(6, hs.getHsgaokao_year());
 			psmt.setString(7, hs.getHschoice());
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -29,23 +29,23 @@ public class HighschoolstudentDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İÆÀÂÛid²éÑ¯ÆÀÂÛ
+	
 
 	public Highschoolstudent findHighschoolstudentByHsid(int hsid) {
-		//½¨Á¢Ò»¸öHighschoolstudent¶ÔÏó
+		//å»ºç«‹ä¸€ä¸ªHighschoolstudentå¯¹è±¡
 		Highschoolstudent hs=new Highschoolstudent();
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®è´¦å·æŸ¥è¯¢
 			String sql=""+"select * from highschoolstudent where hsid = ?";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, hsid);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øcomment¶ÔÏóÉè¶¨idµÈÊôĞÔÖµ
+				//ç»™commentå¯¹è±¡è®¾å®šidç­‰å±æ€§å€¼
 				hs.setHspassword(rs.getString("hspassword"));
 				hs.setHsname(rs.getString("hsname"));
 				hs.setHsphone(rs.getString("hsphone"));
@@ -62,7 +62,7 @@ public class HighschoolstudentDao {
         }finally {
             DataBaseUtil.closeConnection(conn);
         }
-		//·µ»ØHighschoolstudent¶ÔÏó
+		//è¿”å›Highschoolstudentå¯¹è±¡
 		return hs;
 	}
 }
