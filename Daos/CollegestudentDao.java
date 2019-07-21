@@ -90,6 +90,32 @@ public class CollegestudentDao {
         }
 		return false;
 	}
+	
+		//判断某用户名是否存在，若存在则返回true，若不存在返回false
+	public static boolean isCsNameExist(String csname) {
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"select * from collegestudent where csname = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, csname);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				return true;
+				
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return false;
+	}
+	
 	//判断某校园邮箱是否存在，若存在则返回true，若不存在返回false
 	public static boolean isCsemailExist(String email) {
 		//建立数据库连接
