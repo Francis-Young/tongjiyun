@@ -1,90 +1,181 @@
-package servlets;
+package com.lewei.test;
 
 import java.io.IOException;
 
+
+
 import java.io.PrintWriter;
 
+
+
 import javax.servlet.ServletException;
+
 import javax.servlet.annotation.WebServlet;
+
 import javax.servlet.http.HttpServlet;
+
 import javax.servlet.http.HttpServletRequest;
 
+
+
 import javax.servlet.http.HttpServletResponse;
+
 import javax.servlet.http.HttpSession;
 
+
+
 import beans.Collegestudent;
+
 import beans.Highschoolstudent;
+
 import daos.CollegestudentDao;
+
 import daos.HighschoolstudentDao;
 
 
 
+
+
+
+
 @WebServlet("/loginServlet")
+
 public class loginServlet extends HttpServlet {
+
 	private static final long serialVersionUID = 1L;
+
        
+
     /**
+
      * @see HttpServlet#HttpServlet()
+
      */
+
     public loginServlet() {
+
         super();
+
         // TODO Auto-generated constructor stub
+
     }
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		resp.getWriter().append("Served at: ").append(req.getContextPath());
-		String utype = req.getParameter("utype");//é«˜ä¸­ç”Ÿä¸ºâ€0â€œï¼Œå¤§å­¦ç”Ÿä¸ºâ€1â€œ
-		String uname = req.getParameter("uname");
-		String upassword = req.getParameter("upassword");
 
+
+	/**
+
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+
+	 */
+
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+		// TODO Auto-generated method stub
+		
 		resp.setContentType("text;charset=utf-8");
+
 		resp.setCharacterEncoding("UTF-8");
 
+		//resp.getWriter().append("Served at: ").append(req.getContextPath());
+
+		String utype = req.getParameter("utype");//¸ßÖĞÉúÎª¡±0¡°£¬´óÑ§ÉúÎª¡±1¡°
+		//System.out.println(utype);
+		String uname = req.getParameter("uname");
+
+		String upassword = req.getParameter("upassword");
+
+		//resp.setContentType("text;charset=utf-8");
+
+		//resp.setCharacterEncoding("UTF-8");
+
 		HttpSession session = req.getSession();
+
 		
+
+
 
 		if(utype.equals("0"))
+
 		{
+
 			if(HighschoolstudentDao.checkPasswordByHsname(uname, upassword))
+
 			{
+
 				Highschoolstudent hs = HighschoolstudentDao.findHighschoolstudentByHsname(uname);
+
 				session.setAttribute("usertype", "highschoolstudent");
+
 				session.setAttribute("user", hs);
+				System.out.println("µÇÂ½³É¹¦");
 			}
-			else
-		    req.setAttribute("err", "ç”¨æˆ·åæˆ–è€…å¯†ç é”™è¯¯");
-	        req.getRequestDispatcher("login.jsp").forward(req,resp);//è¯·æ±‚è½¬å‘
+
+			else {
+
+		    req.setAttribute("err", "ÓÃ»§Ãû»òÕßÃÜÂë´íÎó");
+
+	        req.getRequestDispatcher("LogIn.jsp").forward(req,resp);//ÇëÇó×ª·¢
+			}
 		}
+
 		else
+
 		{
+
 			if(CollegestudentDao.isPasswordRight(upassword, CollegestudentDao.findCollegestudentByCsname(uname)))
+
 			{
+
 				Collegestudent cs = CollegestudentDao.findCollegestudentByCsname(uname);
+
 				session.setAttribute("usertype", "collegestudent");
+
 				session.setAttribute("user", cs);
+				System.out.println("µÇÂ½³É¹¦");
+
+
 			}
-			else
-		    req.setAttribute("err", "ç”¨æˆ·åæˆ–è€…å¯†ç é”™è¯¯");
-	        req.getRequestDispatcher("login.jsp").forward(req,resp);//è¯·æ±‚è½¬å‘
-				
+
+			else {
+
+		    req.setAttribute("err", "ÓÃ»§Ãû»òÕßÃÜÂë´íÎó");
+
+	        req.getRequestDispatcher("LogIn.jsp").forward(req,resp);//ÇëÇó×ª·¢
+            
+			}	
+
 		}
+
 		
+
 		
+
 		
+
 		
+
 		
+
 	}
 
+
+
 	/**
+
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+
 	 */
+
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
 		
+
 		doGet(req,resp);
 
+
+
 }
+
 }
+
+
