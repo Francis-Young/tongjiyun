@@ -17,7 +17,7 @@ import daos.HighschoolstudentDao;
 /**
  * Servlet implementation class verifycsname
  */
-@WebServlet("/verifycsname")
+@WebServlet("/loginServlet")
 public class loginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -42,7 +42,7 @@ public class loginServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		String utype = req.getParameter("utype");//0为高中生，1为大学生
+		String utype = req.getParameter("utype");//0脦陋赂脽脰脨脡煤拢卢1脦陋麓贸脩搂脡煤
 		String uname = req.getParameter("uname");
 		String upassword = req.getParameter("upassword");
 
