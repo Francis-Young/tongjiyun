@@ -6,7 +6,7 @@ import java.sql.*;
 
 public class HighschoolstudentDao {
 	//插入一个评论
-	public void addHighschoolstudent(Highschoolstudent hs) {
+	public static void addHighschoolstudent(Highschoolstudent hs) {
 		//建立与数据库的连接
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -31,7 +31,7 @@ public class HighschoolstudentDao {
 	}
 	
 
-	public Highschoolstudent findHighschoolstudentByHsid(int hsid) {
+	public static Highschoolstudent findHighschoolstudentByHsid(int hsid) {
 		//建立一个Highschoolstudent对象
 		Highschoolstudent hs=new Highschoolstudent();
 		//建立数据库连接
@@ -65,7 +65,38 @@ public class HighschoolstudentDao {
 		//返回Highschoolstudent对象
 		return hs;
 	}
-	public boolean checkHighschoolstudentByHsname(String hsname) {
+	
+	public static boolean checkPasswordByHsname(String hsname,String hspassword) {
+
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+
+		try {
+			//查询语句，根据账号查询
+			String sql=""+"select * from highschoolstudent where hsname = ? and hspassword = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, hsname);
+			psmt.setString(2, hspassword);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		//返回t or f
+		return false;
+	}
+
+	
+	
+	
+	public static boolean checkHighschoolstudentByHsname(String hsname) {
 
 		//建立数据库连接
 		Connection conn=DataBaseUtil.getConnection();
@@ -90,56 +121,29 @@ public class HighschoolstudentDao {
 		//返回t or f
 		return false;
 	}
-	//检查用户名密码符合与否
-	public static boolean checkPasswordByHsname(String hsname,String hspassword) {
 
-	//建立数据库连接
-	Connection conn=DataBaseUtil.getConnection();
 
-	try {
-		//查询语句，根据账号查询
-		String sql=""+"select * from highschoolstudent where hsname = ? and hspassword = ?";
-		PreparedStatement psmt = conn.prepareStatement(sql);
-		psmt.setString(1, hsname);
-		psmt.setString(2, hspassword);
-		//执行查询语句
-		ResultSet rs = psmt.executeQuery();
-		if (rs.next()) {
-			return true;
-		}
-	}catch(SQLException e) {
-    e.printStackTrace();
-}catch(NullPointerException f){
-    f.printStackTrace();
-}finally {
-    DataBaseUtil.closeConnection(conn);
-}
-	//返回t or f
-	return false;
-}
-
-	
 	public static boolean isHsNameExist(String hsname) {
-	//建立数据库连接
-	Connection conn=DataBaseUtil.getConnection();
-	try {
-		//查询语句，根据学号查询
-		String sql=""+"select * from highschoolstudent where hsname = ?";
-		PreparedStatement psmt = conn.prepareStatement(sql);
-		psmt.setString(1, hsname);
-		//执行查询语句
-		ResultSet rs = psmt.executeQuery();
-		if (rs.next()) {
-			return true;
-
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"select * from highschoolstudent where hsname = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, hsname);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				return true;
+				
 			}
 		}catch(SQLException e) {
-	    e.printStackTrace();
-	}catch(NullPointerException f){
-	    f.printStackTrace();
-	}finally {
-	    DataBaseUtil.closeConnection(conn);
-	}
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
 		return false;
 	}
 }
