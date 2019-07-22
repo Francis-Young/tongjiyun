@@ -21,7 +21,7 @@ public class CollegestudentDao {
 			psmt.setInt(6, cs.getCsyear());
 			psmt.setString(7, cs.getCsemail());
 			psmt.setString(8, cs.getCstele());
-			psmt.setString(8, cs.getCsuniname());
+			psmt.setString(9, cs.getCsuniname());
 			//执行插入语句
 			psmt.execute();
 		}catch(SQLException e) {
@@ -66,30 +66,6 @@ public class CollegestudentDao {
 		//返回collegestudent对象
 		return cs;
 	}
-	//判断某学号学生是否存在，若存在则返回true，若不存在返回false
-	public static boolean isCsNumExist(int num) {
-		//建立数据库连接
-		Connection conn=DataBaseUtil.getConnection();
-		try {
-			//查询语句，根据学号查询
-			String sql=""+"select * from collegestudent where csnum = ?";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, num);
-			//执行查询语句
-			ResultSet rs = psmt.executeQuery();
-			if (rs.next()) {
-				return true;
-				
-			}
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }catch(NullPointerException f){
-            f.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-		return false;
-	}
 	
 	//根据用户名（不是id）查询大学生
 	public static Collegestudent findCollegestudentByCsname(String csname) {
@@ -127,7 +103,32 @@ public class CollegestudentDao {
 		//返回collegestudent对象
 		return cs;
 	}
-		//判断某用户名是否存在，若存在则返回true，若不存在返回false
+	
+	//判断某学号学生是否存在，若存在则返回true，若不存在返回false
+	public static boolean isCsNumExist(int num) {
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"select * from collegestudent where csnum = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, num);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				return true;
+				
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return false;
+	}
+	//判断某用户名是否存在，若存在则返回true，若不存在返回false
 	public static boolean isCsNameExist(String csname) {
 		//建立数据库连接
 		Connection conn=DataBaseUtil.getConnection();
@@ -151,7 +152,6 @@ public class CollegestudentDao {
         }
 		return false;
 	}
-	
 	//判断某校园邮箱是否存在，若存在则返回true，若不存在返回false
 	public static boolean isCsemailExist(String email) {
 		//建立数据库连接
