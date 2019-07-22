@@ -10,13 +10,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import beans.Collegestudent;
+import beans.Highschoolstudent;
 import daos.CollegestudentDao;
 import daos.HighschoolstudentDao;
 
 
-/**
- * Servlet implementation class verifycsname
- */
+
 @WebServlet("/loginServlet")
 public class loginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
@@ -32,46 +34,57 @@ public class loginServlet extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		resp.getWriter().append("Served at: ").append(req.getContextPath());
+		String utype = req.getParameter("utype");//高中生为”0“，大学生为”1“
+		String uname = req.getParameter("uname");
+		String upassword = req.getParameter("upassword");
+
+		resp.setContentType("text;charset=utf-8");
+		resp.setCharacterEncoding("UTF-8");
+
+		HttpSession session = req.getSession();
+		
+
+		if(utype.equals("0"))
+		{
+			if(HighschoolstudentDao.checkPasswordByHsname(uname, upassword))
+			{
+				Highschoolstudent hs = HighschoolstudentDao.findHighschoolstudentByHsname(uname);
+				session.setAttribute("usertype", "highschoolstudent");
+				session.setAttribute("user", hs);
+			}
+			else
+		    req.setAttribute("err", "用户名或者密码错误");
+	        req.getRequestDispatcher("login.jsp").forward(req,resp);//请求转发
+		}
+		else
+		{
+			if(CollegestudentDao.isPasswordRight(upassword, CollegestudentDao.findCollegestudentByCsname(uname)))
+			{
+				Collegestudent cs = CollegestudentDao.findCollegestudentByCsname(uname);
+				session.setAttribute("usertype", "collegestudent");
+				session.setAttribute("user", cs);
+			}
+			else
+		    req.setAttribute("err", "用户名或者密码错误");
+	        req.getRequestDispatcher("login.jsp").forward(req,resp);//请求转发
+				
+		}
+		
+		
+		
+		
+		
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		String utype = req.getParameter("utype");//0Îª¸ßÖÐÉú£¬1Îª´óÑ§Éú
-		String uname = req.getParameter("uname");
-		String upassword = req.getParameter("upassword");
+		
+		doGet(req,resp);
 
-		resp.setContentType("text;charset=utf-8");
-
-		resp.setCharacterEncoding("UTF-8");
-
-		PrintWriter out = resp.getWriter();
-
-		if(utype.equals('0'))
-		{
-			if(HighschoolstudentDao.checkPasswordByHsname(uname, upassword))
-			{
-				out.print("true");
-			}
-			else
-				out.print("false");
-		}
-		else
-		{
-			if(CollegestudentDao.isPasswordRight(upassword, CollegestudentDao.findCollegestudentByCsname(uname)))
-			{
-				out.print("true");
-			}
-			else
-				out.print("false");
-				
-		}
-
-	}
-
+}
 }
