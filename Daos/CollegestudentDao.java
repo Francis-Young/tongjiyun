@@ -91,6 +91,42 @@ public class CollegestudentDao {
 		return false;
 	}
 	
+	//根据用户名（不是id）查询大学生
+	public static Collegestudent findCollegestudentByCsname(String csname) {
+		//建立一个collegestudent对象
+		Collegestudent cs=new Collegestudent();
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			//查询语句，根据用户名查询
+			String sql=""+"select * from collegestudent where csname = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, csname);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				//给collegestudent对象设定id，用户名等属性值
+				cs.setCsid(rs.getInt("csid"));
+				cs.setCsname(rs.getString("csname"));
+				cs.setCspassword(rs.getString("cspassword"));
+				cs.setCssex(rs.getInt("cssex"));
+				cs.setCsnum(rs.getInt("csnum"));
+				cs.setMname(rs.getString("mname"));
+				cs.setCsyear(rs.getInt("csyear"));
+				cs.setCsemail(rs.getString("csemail"));
+				cs.setCstele(rs.getString("cstele"));
+				cs.setCsuniname(rs.getString("csuniname"));
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		//返回collegestudent对象
+		return cs;
+	}
 		//判断某用户名是否存在，若存在则返回true，若不存在返回false
 	public static boolean isCsNameExist(String csname) {
 		//建立数据库连接
