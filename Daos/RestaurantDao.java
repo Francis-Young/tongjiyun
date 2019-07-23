@@ -8,7 +8,7 @@ import util.DataBaseUtil;
 
 public class RestaurantDao {
 
-	//²åÈëÒ»¸ö·¹µê
+	//æ’å…¥ä¸€ä¸ªé¥­åº—
 	public void addRestaurant(Restaurant res) {
 		Connection conn=DataBaseUtil.getConnection();
 		try {
@@ -33,7 +33,7 @@ public class RestaurantDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İ·¹µêÃû²éÕÒÒ»¸ö·¹µê
+	//æ ¹æ®é¥­åº—åæŸ¥æ‰¾ä¸€ä¸ªé¥­åº—
 	public Restaurant findRestaurantByName(String name) {
 		Restaurant res=new Restaurant();
 		Connection conn=DataBaseUtil.getConnection();
@@ -66,7 +66,42 @@ public class RestaurantDao {
         }
 		return res;
 	}
-	//µÃµ½È«²¿µÄ·¹µê
+		//æ ¹æ®é¥­åº—åidæŸ¥æ‰¾ä¸€ä¸ªé¥­åº—
+	public Restaurant findRestaurantByName(int resid) {
+		Restaurant res=new Restaurant();
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			
+			String sql=""+"select * from restaurant where resid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+	        psmt.setInt(1,resid);
+	        ResultSet rs = psmt.executeQuery();
+	        
+	        if (rs.next()) {
+	        	res.setResid(rs.getInt("resid"));
+	        	res.setResname(rs.getString("resname"));
+	        	res.setResintro(rs.getString("resintro"));
+	        	res.setRespicaddr(rs.getString("respicaddr"));
+	        	res.setMenuaddr(rs.getString("menuaddr"));
+	        	res.setResvideoaddr(rs.getString("resvideoaddr"));
+	        	res.setFoodtype(rs.getString("foodtype"));
+	        	res.setSpecialdish(rs.getString("specialdish"));
+	        	res.setMeanprice(rs.getInt("meanprice"));
+	        	res.setResscore(rs.getInt("resscore"));
+	        	res.setResaddr(rs.getString("resaddr"));
+	        }
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return res;
+	}
+	
+	
+	//å¾—åˆ°å…¨éƒ¨çš„é¥­åº—
 	public List<Restaurant> getRestaurant() {
 		List<Restaurant> restaurant=new ArrayList<Restaurant>();
 		Connection conn=DataBaseUtil.getConnection();
@@ -100,7 +135,7 @@ public class RestaurantDao {
         }
 		return restaurant;
 	}
-	//¸üĞÂ·¹µêµÄÆÀ·Ö
+	//æ›´æ–°é¥­åº—çš„è¯„åˆ†
 	public void updateResscore(int resscore,Restaurant res) {
 		Connection conn=DataBaseUtil.getConnection();
 		try {
