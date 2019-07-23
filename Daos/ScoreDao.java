@@ -114,5 +114,30 @@ public class ScoreDao {
 		return residList;
 	}
 	
-	
+		//根据用户id:csid和饭店id:resid查询是否存在评分
+	public boolean checkScoreByCsidAndResid(int csid,int resid) {
+		//建立一个score对象
+		Score sc=new Score();
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"select * from score where csid = ? and resid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, csid);
+			psmt.setInt(2, resid);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				return true;
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return false;
+	}
 }
