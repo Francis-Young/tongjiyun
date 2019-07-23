@@ -140,4 +140,30 @@ public class ScoreDao {
         }
 		return false;
 	}
+	
+		//根据scoreid修改得分
+	public void updatescoreByScorid(int scoreid,int newScore) {
+
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		int avgScore=0;
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"update score set score = ? where scoreid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setInt(1, scoreid);
+			psmt.setInt(2, newScore);
+	
+			//执行语句
+			psmt.execute();
+	
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+
+	}
 }
