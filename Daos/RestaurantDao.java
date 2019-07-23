@@ -67,7 +67,7 @@ public class RestaurantDao {
 		return res;
 	}
 		//根据饭店名id查找一个饭店
-	public Restaurant findRestaurantByName(int resid) {
+	public Restaurant findRestaurantByResid(int resid) {
 		Restaurant res=new Restaurant();
 		Connection conn=DataBaseUtil.getConnection();
 		try {
