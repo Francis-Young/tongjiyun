@@ -83,6 +83,36 @@ public class ScoreDao {
 		return avgScore;
 	}
 	
+	//查询所有饭店
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ArrayList findAllRestaurant() {
+
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+		//打包在字符串数组里
+			ArrayList residList= new ArrayList();
+		try {
+			//查询语句，根据学号查询
+			String sql=""+"select * from score";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			
+			while(rs.next())
+			{
+				residList.add(rs.getString("resid"));
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		
+		return residList;
+	}
 	
 	
 }
