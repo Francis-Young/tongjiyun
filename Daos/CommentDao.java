@@ -1,152 +1,84 @@
-package daos;
-import beans.Comment;
-import util.DataBaseUtil;
-import java.sql.*;
+package com.dao;
+
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
+
+import com.model.Comment;
+import com.model.PageBean;
+import com.util.DateUtil;
+import com.util.StringUtil;
 
 public class CommentDao {
-	//插入一个评论
-	public void addComment(Comment ct) {
-		//建立与数据库的连接
-		Connection conn=DataBaseUtil.getConnection();
-		try {
-			//插入语句，其中commentid为自增，所以只用写default
-			String sql=""+ "insert into comment" +" (commentid,poid,csid,preid,text,likenum,time,deleted) "+"values(default,?,?,?,?,?,?,?)";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			//设定插入的帖子号等值
-			psmt.setInt(1, ct.getPoid());
-			psmt.setInt(2, ct.getCsid());
-			psmt.setInt(3, ct.getPreid());
-			psmt.setString(4, ct.getText());
-			psmt.setInt(5, ct.getLikenum());
-			psmt.setTime(6, ct.getTime());
-			psmt.setInt(7, ct.getDeleted());
-			//执行插入语句
-			psmt.execute();
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-	}
-	//根据评论id查询评论
 
-	public Comment findCommentByCommentid(int commentid) {
-		//建立一个comment对象
-		Comment ct=new Comment();
-		//建立数据库连接
-		Connection conn=DataBaseUtil.getConnection();
-
-
-		try {
-			//查询语句，根据学号查询
-			String sql=""+"select * from comment where commentid = ?";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, commentid);
-			//执行查询语句
-			ResultSet rs = psmt.executeQuery();
-			if (rs.next()) {
-				//给comment对象设定id等属性值
-				ct.setCommentid(rs.getInt("commentid"));
-				ct.setPoid(rs.getInt("poid"));
-				ct.setCsid(rs.getInt("csid"));
-				ct.setPreid(rs.getInt("preid"));
-				ct.setDeleted(rs.getInt("deleted"));
-				ct.setText(rs.getString("text"));
-				ct.setLikenum(rs.getInt("likenum"));
-				ct.setTime(rs.getTime("time"));
-				
-			}
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }catch(NullPointerException f){
-            f.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-		//返回comment对象
-		return ct;
-	}
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public ArrayList findCommentByPoid(int poid) {//根据帖子号查询所有评论
-		//建立一个comment对象
-		Comment ct=new Comment();
-		//建立数据库连接
-		Connection conn=DataBaseUtil.getConnection();
-		ArrayList aList=new ArrayList<String>();//准备组
-		try {
-			//查询语句，根据学号查询
-			String sql=""+"select * from comment where poid = ?";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, poid);
-			//执行查询语句
-			ResultSet rs = psmt.executeQuery();
-			while (rs.next()) {
-				//给comment对象设定id等属性值
-				ct.setCommentid(rs.getInt("commentid"));
-				ct.setPoid(rs.getInt("poid"));
-				ct.setCsid(rs.getInt("csid"));
-				ct.setPreid(rs.getInt("preid"));
-				ct.setDeleted(rs.getInt("deleted"));
-				ct.setText(rs.getString("text"));
-				ct.setLikenum(rs.getInt("likenum"));
-				ct.setTime(rs.getTime("time"));
-				aList.add(ct);
-			}
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }catch(NullPointerException f){
-            f.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-		//返回comment对象
-		return aList;
-	}
-	public void updateLikenumByCommentid(int commentid,int newlikenum) {//根据帖子号改变点赞数
-
-		//建立数据库连接
-		Connection conn=DataBaseUtil.getConnection();
-
-		try {
-			//查询语句，根据学号查询
-			String sql=""+"update comment set likenum = ? where commentid = ?";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, newlikenum);
-			psmt.setInt(2, commentid);
-			//执行更新语句
-			psmt.executeUpdate();
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }catch(NullPointerException f){
-            f.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-
+	public List<Comment> commentList(Connection con,Comment s_comment,PageBean pageBean,String bCommentDate,String aCommentDate)throws Exception{
+		List<Comment> commentList=new ArrayList<Comment>();
+		StringBuffer sb=new StringBuffer("select * from t_comment t1,t_info t2 where t1.infoId=t2.infoId");
+		if(s_comment.getInfoId()!=-1){
+			sb.append(" and t1.infoId="+s_comment.getInfoId());
+		}
+		if(StringUtil.isNotEmpty(bCommentDate)){
+			sb.append(" and TO_DAYS(t1.commentDate)>=TO_DAYS('"+bCommentDate+"')");
+		}
+		if(StringUtil.isNotEmpty(aCommentDate)){
+			sb.append(" and TO_DAYS(t1.commentDate)<=TO_DAYS('"+aCommentDate+"')");
+		}
+		sb.append(" order by t1.commentDate desc ");
+		if(pageBean!=null){
+			sb.append(" limit "+pageBean.getStart()+","+pageBean.getPageSize());
+		}
+		PreparedStatement pstmt=con.prepareStatement(sb.toString());
+		ResultSet rs=pstmt.executeQuery();
+		while(rs.next()){
+			Comment comment=new Comment();
+			comment.setCommentId(rs.getInt("commentId"));
+			comment.setInfoId(rs.getInt("infoId"));
+			comment.setInfoTitle(rs.getString("title"));
+			comment.setContent(rs.getString("content"));
+			comment.setUserIP(rs.getString("userIP"));
+			comment.setCommentDate(DateUtil.formatString(rs.getString("commentDate"), "yyyy-MM-dd HH:mm:ss"));
+			commentList.add(comment);
+		}
+		return commentList;
 	}
 	
-	//把一个评论标记为已删除
-	public void updateDeleted(int commentid,int deleted) {
-
-		//建立数据库连接
-		Connection conn=DataBaseUtil.getConnection();
-
-		try {
-			//更新语句，更新deleted
-			String sql=""+"update comment set deleted = ? where commentid = ?";
-			PreparedStatement psmt = conn.prepareStatement(sql);
-			psmt.setInt(1, deleted);
-			psmt.setInt(2, commentid);
-			//执行更新语句
-			psmt.executeUpdate();
-		}catch(SQLException e) {
-            e.printStackTrace();
-        }catch(NullPointerException f){
-            f.printStackTrace();
-        }finally {
-            DataBaseUtil.closeConnection(conn);
-        }
-
+	public int commentCount(Connection con,Comment s_comment,String bCommentDate,String aCommentDate)throws Exception{
+		StringBuffer sb=new StringBuffer("select count(*) as total from t_comment");
+		if(s_comment.getInfoId()!=-1){
+			sb.append(" and infoId="+s_comment.getInfoId());
+		}
+		if(StringUtil.isNotEmpty(bCommentDate)){
+			sb.append(" and TO_DAYS(commentDate)>=TO_DAYS('"+bCommentDate+"')");
+		}
+		if(StringUtil.isNotEmpty(aCommentDate)){
+			sb.append(" and TO_DAYS(commentDate)<=TO_DAYS('"+aCommentDate+"')");
+		}
+		PreparedStatement pstmt=con.prepareStatement(sb.toString().replaceFirst("and", "where"));
+		ResultSet rs=pstmt.executeQuery();
+		if(rs.next()){
+			return rs.getInt("total");
+		}else{
+			return 0;
+		}
+	}
+	
+	
+	
+	public int commentAdd(Connection con,Comment comment)throws Exception{
+		String sql="insert into t_comment values(null,?,?,?,now())";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		pstmt.setInt(1, comment.getInfoId());
+		pstmt.setString(2, comment.getContent());
+		pstmt.setString(3, comment.getUserIP());
+		return pstmt.executeUpdate();
+	}
+	
+	public int commentDelete(Connection con,String commentIds)throws Exception{
+		String sql="delete from t_comment where commentId in ("+commentIds+")";
+		PreparedStatement pstmt=con.prepareStatement(sql);
+		return pstmt.executeUpdate();
 	}
 }
