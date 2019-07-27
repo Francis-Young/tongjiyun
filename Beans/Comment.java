@@ -1,63 +1,65 @@
-package beans;
+package com.model;
 
-import java.sql.Time;
+import java.util.Date;
 
 public class Comment {
-	private int commentid;
-	private int poid;
-	private int csid;
-	private int preid;
-	private String text=new String();
-	private int likenum;
-	private Time time=null;
-	private int deleted;
-	public int getCommentid() {
-		return commentid;
+
+	private int commentId;
+	private int infoId=-1;
+	private String infoTitle;
+	private String content;
+	private String userIP;
+	private Date commentDate;
+	
+	
+	
+	public Comment(int infoId, String content, String userIP) {
+		super();
+		this.infoId = infoId;
+		this.content = content;
+		this.userIP = userIP;
 	}
-	public void setCommentid(int commentid) {
-		this.commentid = commentid;
+	public Comment() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
-	public int getPoid() {
-		return poid;
+	public int getCommentId() {
+		return commentId;
 	}
-	public void setPoid(int poid) {
-		this.poid = poid;
+	public void setCommentId(int commentId) {
+		this.commentId = commentId;
 	}
-	public int getCsid() {
-		return csid;
+	public int getInfoId() {
+		return infoId;
 	}
-	public void setCsid(int csid) {
-		this.csid = csid;
+	public void setInfoId(int infoId) {
+		this.infoId = infoId;
 	}
-	public int getPreid() {
-		return preid;
+	public String getContent() {
+		return content;
 	}
-	public void setPreid(int preid) {
-		this.preid = preid;
+	public void setContent(String content) {
+		this.content = content;
 	}
-	public String getText() {
-		return text;
+	public String getUserIP() {
+		return userIP;
 	}
-	public void setText(String text) {
-		this.text = text;
+	public void setUserIP(String userIP) {
+		this.userIP = userIP;
 	}
-	public int getLikenum() {
-		return likenum;
+	public Date getCommentDate() {
+		return commentDate;
 	}
-	public void setLikenum(int likenum) {
-		this.likenum = likenum;
+	public void setCommentDate(Date commentDate) {
+		this.commentDate = commentDate;
 	}
-	public Time getTime() {
-		return time;
+	public String getInfoTitle() {
+		return infoTitle;
 	}
-	public void setTime(Time time) {
-		this.time = time;
+	public void setInfoTitle(String infoTitle) {
+		this.infoTitle = infoTitle;
 	}
-	public int getDeleted() {
-		return deleted;
-	}
-	public void setDeleted(int deleted) {
-		this.deleted = deleted;
-	}
+	
+	
 	
 }
