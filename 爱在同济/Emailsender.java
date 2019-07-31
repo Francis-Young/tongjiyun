@@ -39,7 +39,7 @@ public class Emailsender
 
         MimeMessage message = new MimeMessage(session);//由邮件会话新建一个消息对象
         message.setFrom(new InternetAddress("1209267765@qq.com"));//设置发件人的地址
-        message.setRecipient(Message.RecipientType.TO, new InternetAddress("1751716@tongji.edu.cn"));//设置收件人,并设置其接收类型为TO
+        message.setRecipient(Message.RecipientType.TO, new InternetAddress(recevierAddress));//设置收件人,并设置其接收类型为TO
         message.setSubject("同学，你有一封信待查收！");//设置标题
         //设置信件内容
 //        message.setText(mailContent); //发送 纯文本 邮件 todo
