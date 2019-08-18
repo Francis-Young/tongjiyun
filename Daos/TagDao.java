@@ -85,4 +85,34 @@ public class TagDao {
         }
 		return tag;
 	}
+		//获得前一天全部的表白
+		public List<Tag> getTagYesterday(Date date) {
+			List<Tag> tag=new ArrayList<Tag>();
+			Connection conn=DataBaseUtil.getConnection();
+			try {
+				
+				String sql=""+"select * from tag where date = ?";
+				PreparedStatement psmt = conn.prepareStatement(sql);
+				psmt.setDate(1,date);
+		        ResultSet rs = psmt.executeQuery();
+		        
+		        while (rs.next()) {
+		        	Tag t=new Tag();
+		        	t.setTagid(rs.getInt("tagid"));
+		        	t.setCsid(rs.getInt("csid"));
+		        	t.setText(rs.getString("text"));
+		        	t.setTime(rs.getTime("time"));
+		        	t.setDate(rs.getDate("date"));
+		        	tag.add(t);
+		        }
+		        
+			}catch(SQLException e) {
+	            e.printStackTrace();
+	        }catch(NullPointerException f){
+	            f.printStackTrace();
+	        }finally {
+	            DataBaseUtil.closeConnection(conn);
+	        }
+			return tag;
+		}
 }
