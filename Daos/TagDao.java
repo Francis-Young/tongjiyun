@@ -8,17 +8,17 @@ import util.DataBaseUtil;
 
 public class TagDao {
 
-	//²åÈëÒ»Ìõ±í°×
+	//æ’å…¥ä¸€æ¡è¡¨ç™½
 	public void addTag (Tag tag) {
 		Connection conn=DataBaseUtil.getConnection();
 		try {
 
-			String sql=""+ "insert into tag" +" (tagid,csid,text,time) "+"values(default,?,?,?)";
+			String sql=""+ "insert into tag" +" (tagid,csid,text,time,date) "+"values(default,?,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, tag.getCsid());
 			psmt.setString(2, tag.getText());
 			psmt.setTime(3, tag.getTime());
-			
+			psmt.setDate(4, tag.getDate());
 			psmt.execute();
 			
 		}catch(SQLException e) {
@@ -28,7 +28,7 @@ public class TagDao {
         }
 	}
 	
-	//¸ù¾İ±í°×id²éÕÒÒ»Ìõ±í°×
+	//æ ¹æ®è¡¨ç™½idæŸ¥æ‰¾ä¸€æ¡è¡¨ç™½
 	public Tag findTagByTagid(int tid) {
 		Tag tag=new Tag();
 		Connection conn=DataBaseUtil.getConnection();
@@ -44,7 +44,7 @@ public class TagDao {
 	        	tag.setCsid(rs.getInt("csid"));
 	        	tag.setText(rs.getString("text"));
 	        	tag.setTime(rs.getTime("time"));
-	        	
+	        	tag.setDate(rs.getDate("date"));
 	        }
 	        
 		}catch(SQLException e) {
@@ -56,7 +56,7 @@ public class TagDao {
         }
 		return tag;
 	}
-	//»ñµÃÈ«²¿µÄ±í°×
+	//è·å¾—å…¨éƒ¨çš„è¡¨ç™½
 	public List<Tag> getTag() {
 		List<Tag> tag=new ArrayList<Tag>();
 		Connection conn=DataBaseUtil.getConnection();
@@ -72,6 +72,7 @@ public class TagDao {
 	        	t.setCsid(rs.getInt("csid"));
 	        	t.setText(rs.getString("text"));
 	        	t.setTime(rs.getTime("time"));
+	        	t.setDate(rs.getDate("date"));
 	        	tag.add(t);
 	        }
 	        
