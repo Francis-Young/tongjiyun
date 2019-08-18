@@ -15,23 +15,23 @@ public class getWebTime {
 
 
  
-	       // String webUrl2 = "http://www.baidu.com";//°Ù¶È
+	       // String webUrl2 = "http://www.baidu.com";//ç™¾åº¦
 
 
 	    /**
-	     * »ñÈ¡Ö¸¶¨ÍøÕ¾µÄÈÕÆÚÊ±¼ä
+	     * è·å–æŒ‡å®šç½‘ç«™çš„æ—¥æœŸæ—¶é—´
 	     * 
 	     * @param webUrl
 	     * @return
 	     */
 	    public static java.sql.Date getWebsiteDate(String webUrl){
 	        try {
-	            URL url = new URL(webUrl);// È¡µÃ×ÊÔ´¶ÔÏó
-	            URLConnection uc = url.openConnection();// Éú³ÉÁ¬½Ó¶ÔÏó
-	            uc.connect();// ·¢³öÁ¬½Ó
-	            long ld = uc.getDate();// ¶ÁÈ¡ÍøÕ¾ÈÕÆÚÊ±¼ä
-	            Date date = new Date(ld);// ×ª»»Îª±ê×¼Ê±¼ä¶ÔÏó
-	            java.sql.Date date1=new java.sql.Date(date.getTime());//Äê ÔÂ ÈÕ
+	            URL url = new URL(webUrl);// å–å¾—èµ„æºå¯¹è±¡
+	            URLConnection uc = url.openConnection();// ç”Ÿæˆè¿æ¥å¯¹è±¡
+	            uc.connect();// å‘å‡ºè¿æ¥
+	            long ld = uc.getDate();// è¯»å–ç½‘ç«™æ—¥æœŸæ—¶é—´
+	            Date date = new Date(ld);// è½¬æ¢ä¸ºæ ‡å‡†æ—¶é—´å¯¹è±¡
+	            java.sql.Date date1=new java.sql.Date(date.getTime());//å¹´ æœˆ æ—¥
 	            return date1;
 	        } catch (MalformedURLException e) {
 	            e.printStackTrace();
@@ -42,13 +42,13 @@ public class getWebTime {
 	    }
 	    public static Time getWebsiteTime(String webUrl){
 	        try {
-	            URL url = new URL(webUrl);// È¡µÃ×ÊÔ´¶ÔÏó
-	            URLConnection uc = url.openConnection();// Éú³ÉÁ¬½Ó¶ÔÏó
-	            uc.connect();// ·¢³öÁ¬½Ó
-	            long ld = uc.getDate();// ¶ÁÈ¡ÍøÕ¾ÈÕÆÚÊ±¼ä
-	            Date date = new Date(ld);// ×ª»»Îª±ê×¼Ê±¼ä¶ÔÏó
+	            URL url = new URL(webUrl);// å–å¾—èµ„æºå¯¹è±¡
+	            URLConnection uc = url.openConnection();// ç”Ÿæˆè¿æ¥å¯¹è±¡
+	            uc.connect();// å‘å‡ºè¿æ¥
+	            long ld = uc.getDate();// è¯»å–ç½‘ç«™æ—¥æœŸæ—¶é—´
+	            Date date = new Date(ld);// è½¬æ¢ä¸ºæ ‡å‡†æ—¶é—´å¯¹è±¡
 	        
-                java.sql.Time date2=new java.sql.Time(date.getTime());//Ê±   ·Ö    Ãë 
+                java.sql.Time date2=new java.sql.Time(date.getTime());//æ—¶   åˆ†    ç§’ 
 	            return date2;
 	        } catch (MalformedURLException e) {
 	            e.printStackTrace();
@@ -56,6 +56,12 @@ public class getWebTime {
 	            e.printStackTrace();
 	        }
 	        return null;
+	    }
+	    public static Date yesterday(Date today) {//è·å–æ˜¨å¤©æ—¥æœŸ
+	        Calendar calendar = Calendar.getInstance();
+	        calendar.setTime(today);
+	        calendar.set(Calendar.DATE, calendar.get(Calendar.DATE) - 1);
+	        return calendar.getTime();
 	    }
 
  }
