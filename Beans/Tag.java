@@ -11,6 +11,13 @@ public class Tag {
 	private int csid;
 	private String text=new String();
 	private Time time=null;
+		private Date date=null;
+	public int getTagid() {
+		return tagid;
+	}
+	public Date getDate() {
+		return date;
+	}
 	public int getTagid() {
 		return tagid;
 	}
