@@ -11,6 +11,20 @@ public class Letter {
 	private Time sendtime;
 	private String text;
 	private Timestamp time;
+	private int sendertype;
+	private int receivertype;
+	public int getSendertype() {
+		return sendertype;
+	}
+	public void setSendertype(int sendertype) {
+		this.sendertype = sendertype;
+	}
+	public int getReceivertype() {
+		return receivertype;
+	}
+	public void setReceivertype(int receivertype) {
+		this.receivertype = receivertype;
+	}
 	public Timestamp getTime() {
 		return time;
 	}
