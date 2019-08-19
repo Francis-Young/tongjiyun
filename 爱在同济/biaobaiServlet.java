@@ -38,7 +38,7 @@ public class biaobaiServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		resp.getWriter().append("Served at: ").append(req.getContextPath());
-		//»ñÈ¡ÇëÇóµÄĞĞÎª
+		//è·å–è¯·æ±‚çš„è¡Œä¸º
 		String action = req.getParameter("action");
 		switch (action)
 		{
@@ -58,8 +58,8 @@ public class biaobaiServlet extends HttpServlet {
 
 	private void Hand_in(HttpServletRequest req, HttpServletResponse resp) {
 		// TODO Auto-generated method stub
-		java.sql.Date date= getWebTime.getWebsiteDate("http://www.baidu.com");//»ñÈ¡ÍøÂçÈÕÆÚ
-		java.sql.Time time= getWebTime.getWebsiteTime("http://www.baidu.com");//»ñÈ¡ÍøÂçÊ±¼ä
+		java.sql.Date date= getWebTime.getWebsiteDate("http://www.baidu.com");//è·å–ç½‘ç»œæ—¥æœŸ
+		java.sql.Time time= getWebTime.getWebsiteTime("http://www.baidu.com");//è·å–ç½‘ç»œæ—¶é—´
 		HttpSession session= req.getSession();
 		Collegestudent cs = (Collegestudent) session.getAttribute("user");
 		int csid=cs.getCsid();
@@ -74,13 +74,14 @@ public class biaobaiServlet extends HttpServlet {
 	}
 	private void see(HttpServletRequest req, HttpServletResponse resp) {
 		// TODO Auto-generated method stub
-		java.sql.Date dateToday= getWebTime.getWebsiteDate("http://www.baidu.com");//»ñÈ¡ÍøÂçÈÕÆÚ
-		java.sql.Time time= getWebTime.getWebsiteTime("http://www.baidu.com");//»ñÈ¡ÍøÂçÊ±¼ä
+		java.sql.Date dateToday= getWebTime.getWebsiteDate("http://www.baidu.com");//è·å–ç½‘ç»œæ—¥æœŸ
+		java.sql.Time time= getWebTime.getWebsiteTime("http://www.baidu.com");//è·å–ç½‘ç»œæ—¶é—´
 		HttpSession session= req.getSession();
 		Collegestudent cs = (Collegestudent) session.getAttribute("user");
 		int csid=cs.getCsid();
-		Date dateYesterday=getWebTime.yesterday(dateToday);
-		List list = (new TagDao()).getTagYesterday((java.sql.Date) dateYesterday);//???
+		Date datey=getWebTime.yesterday(dateToday);
+		java.sql.Date dateYesterday=new java.sql.Date(datey.getTime());//è½¬æ¢dateç±»å‹
+		List list = (new TagDao()).getTagYesterday(dateYesterday);
 		for (int i = 0; i < list.size(); i++)
             {
 			Tag tag= (Tag)(list.get(i));
