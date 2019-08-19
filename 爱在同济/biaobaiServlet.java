@@ -69,7 +69,8 @@ public class biaobaiServlet extends HttpServlet {
 		tag.setDate(date);
 		tag.setText(text);
 		tag.setTime(time);
-		
+		TagDao tg = new TagDao();
+		tg.addTag(tag);
 		
 	}
 	private void see(HttpServletRequest req, HttpServletResponse resp) {
