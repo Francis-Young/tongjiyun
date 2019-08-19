@@ -10,6 +10,14 @@ public class Letter {
 	private Date senddate;
 	private Time sendtime;
 	private String text;
+	private Timestamp time;
+	public Timestamp getTime() {
+		return time;
+	}
+	public void setTime(Timestamp time) {
+		this.time = time;
+	}
+	
 	public int getLetterid() {
 		return letterid;
 	}
