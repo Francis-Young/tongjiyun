@@ -115,4 +115,34 @@ public class TagDao {
 	        }
 			return tag;
 		}
+			//获得300条最新表白
+		public List<Tag> getTaglast300(Date date) {
+			List<Tag> tag=new ArrayList<Tag>();
+			Connection conn=DataBaseUtil.getConnection();
+			try {
+				
+				String sql=""+"select * from tag order by time limit 300";
+				PreparedStatement psmt = conn.prepareStatement(sql);
+				
+		        ResultSet rs = psmt.executeQuery();
+		        
+		        while (rs.next()) {
+		        	Tag t=new Tag();
+		        	t.setTagid(rs.getInt("tagid"));
+		        	t.setCsid(rs.getInt("csid"));
+		        	t.setText(rs.getString("text"));
+		        	t.setTime(rs.getTime("time"));
+		        	t.setDate(rs.getDate("date"));
+		        	tag.add(t);
+		        }
+		        
+			}catch(SQLException e) {
+	            e.printStackTrace();
+	        }catch(NullPointerException f){
+	            f.printStackTrace();
+	        }finally {
+	            DataBaseUtil.closeConnection(conn);
+	        }
+			return tag;
+		}
 }
