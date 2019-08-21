@@ -116,7 +116,7 @@ public class TagDao {
 			return tag;
 		}
 			//获得300条最新表白
-		public List<Tag> getTaglast300(Date date) {
+		public List<Tag> getTaglast300() {
 			List<Tag> tag=new ArrayList<Tag>();
 			Connection conn=DataBaseUtil.getConnection();
 			try {
