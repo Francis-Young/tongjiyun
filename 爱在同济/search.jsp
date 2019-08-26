@@ -451,7 +451,7 @@ function search()
           });
     
 
-	},2000);//settimeout
+	},1500);//settimeout
 }
 </script>
 
