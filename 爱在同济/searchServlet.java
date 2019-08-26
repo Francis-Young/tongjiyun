@@ -55,7 +55,7 @@ public class searchServlet extends HttpServlet {
 		if (tags.isEmpty())
 		{
 			
-			resp.getWriter().print("nocontent");
+			resp.getWriter().print(URLEncoder.encode("mark0*mark1æ²¡æœ‰ç›¸å…³è®°å½•ï¼mark2","utf-8"));
 			
 		}
 		else
@@ -67,7 +67,7 @@ public class searchServlet extends HttpServlet {
 			
 		}
 		System.out.println(s);
-		resp.getWriter().print(URLEncoder.encode(s,"utf-8"));//½â¾öÖĞÎÄÂÒÂë
+		resp.getWriter().print(URLEncoder.encode(s,"utf-8"));//Â½Ã¢Â¾Ã¶Ã–ÃÃÃ„Ã‚Ã’Ã‚Ã«
 		}	
 	
 			// TODO Auto-generated catch block
