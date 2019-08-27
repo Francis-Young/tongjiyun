@@ -33,7 +33,7 @@
 	left: 0px;
 	top: 0px;
 	z-index: 10;
-	background-color: #f00;
+	background-color: rgba(255,0,0,0.5);
 	width: 100px;
 	height: 100px;
 	transition: all 5s;
@@ -46,7 +46,7 @@
 	z-index: 10;
 	width: 100px;
 	height: 100px;
-	background-color: rgb(251, 255, 0);
+	background-color: rgba(251, 255, 0,0.5);
 	transition: all 5s;
 }
 
@@ -57,7 +57,7 @@
 	z-index: 10;
 	width: 100px;
 	height: 100px;
-	background-color: rgb(60, 255, 0);
+	background-color: rgba(60, 255, 0,0.5);
 	transition: all 5s;
 }
 
@@ -68,7 +68,7 @@
 	z-index: 10;
 	width: 100px;
 	height: 100px;
-	background-color: rgb(0, 47, 255);
+	background-color: rgba(0, 47, 255,0.5);
 	transition: all 5s;
 }
 
@@ -79,7 +79,7 @@
 	z-index: 10;
 	width: 100px;
 	height: 100px;
-	background-color: rgb(153, 0, 255);
+	background-color: rgba(153, 0, 255,0.5);
 	transition: all 5s;
 }
 </style>
