@@ -14,15 +14,15 @@ import beans.Tag;
 import util.DataBaseUtil;
 
 public class LetterDao {
-	//²åÈëÒ»¸ö´«ÉùÍ²
+	//æ’å…¥ä¸€ä¸ªä¼ å£°ç­’
 	public void addLetter(Letter le) {
-		//½¨Á¢ÓëÊı¾İ¿âµÄÁ¬½Ó
+		//å»ºç«‹ä¸æ•°æ®åº“çš„è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
 			
-			String sql=""+ "insert into letter" +" (letterid,senderid,receiverid,senddate,sendtime,text,sendertype,receivertype) "+"values(default,?,?,?,?,?)";
+			String sql=""+ "insert into letter" +" (letterid,senderid,receiverid,senddate,sendtime,text,sendertype,receivertype) "+"values(default,?,?,?,?,?,?,?)";
 			PreparedStatement psmt = conn.prepareStatement(sql);
-			//Éè¶¨²åÈëµÄÌû×ÓºÅµÈÖµ
+			//è®¾å®šæ’å…¥çš„å¸–å­å·ç­‰å€¼
 			psmt.setInt(1, le.getSenderid());
 			psmt.setInt(2, le.getReceiverid());
 			psmt.setDate(3, le.getSenddate());
@@ -31,7 +31,7 @@ public class LetterDao {
 			psmt.setInt(6, le.getSendertype());
 			psmt.setInt(7, le.getReceivertype());
 			
-			//Ö´ĞĞ²åÈëÓï¾ä
+			//æ‰§è¡Œæ’å…¥è¯­å¥
 			psmt.execute();
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -39,14 +39,14 @@ public class LetterDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	//¸ù¾İsenderidºÍreceiverid²éÑ¯Õ¾ÄÚĞÅµÄÄÚÈİ
+	//æ ¹æ®senderidå’ŒreceiveridæŸ¥è¯¢ç«™å†…ä¿¡çš„å†…å®¹
 	public List<Letter> findLettersByTalkersid (int talker1id,int talker2id, int talker1type ,int talker2type) {
 		List<Letter> letters=new ArrayList<Letter>();
 	
-		//½¨Á¢Êı¾İ¿âÁ¬½Ó
+		//å»ºç«‹æ•°æ®åº“è¿æ¥
 		Connection conn=DataBaseUtil.getConnection();
 		try {
-			//²éÑ¯Óï¾ä£¬¸ù¾İÑ§ºÅ²éÑ¯
+			//æŸ¥è¯¢è¯­å¥ï¼Œæ ¹æ®å­¦å·æŸ¥è¯¢
 			String sql=""+"select * from letter where (senderid = ? and receiverid = ? and sendertype = ? and receivertype =?) or (senderid = ? and receiverid = ? and sendertype = ? and receivertype =?) order by time";
 			PreparedStatement psmt = conn.prepareStatement(sql);
 			psmt.setInt(1, talker1id);
@@ -57,10 +57,10 @@ public class LetterDao {
 			psmt.setInt(6, talker1id);
 			psmt.setInt(7, talker2type);
 			psmt.setInt(8, talker1type);
-			//Ö´ĞĞ²éÑ¯Óï¾ä
+			//æ‰§è¡ŒæŸ¥è¯¢è¯­å¥
 			ResultSet rs = psmt.executeQuery();
 			if (rs.next()) {
-				//¸øscore¶ÔÏóÉè¶¨id£¬ÓÃ»§ÃûµÈÊôĞÔÖµ
+				//ç»™scoreå¯¹è±¡è®¾å®šidï¼Œç”¨æˆ·åç­‰å±æ€§å€¼
 				Letter le = new Letter();
 				le.setLetterid(rs.getInt("letterid"));
 				le.setReceiverid(rs.getInt("receiverid"));
