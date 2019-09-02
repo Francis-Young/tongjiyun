@@ -14,7 +14,7 @@ import beans.Tag;
 import util.DataBaseUtil;
 
 public class LetterDao {
-	//插入一个传声筒
+	//插入一个站内信
 	public void addLetter(Letter le) {
 		//建立与数据库的连接
 		Connection conn=DataBaseUtil.getConnection();
@@ -59,8 +59,8 @@ public class LetterDao {
 			psmt.setInt(8, talker1type);
 			//执行查询语句
 			ResultSet rs = psmt.executeQuery();
-			if (rs.next()) {
-				//给score对象设定id，用户名等属性值
+					while (rs.next()) {
+				//给score对象设定id，用户名等属性值			
 				Letter le = new Letter();
 				le.setLetterid(rs.getInt("letterid"));
 				le.setReceiverid(rs.getInt("receiverid"));
@@ -72,6 +72,7 @@ public class LetterDao {
 				le.setSendertype(rs.getInt("sendertype"));
 				le.setReceivertype(rs.getInt("receivertype"));
 				letters.add(le);
+				//System.out.println("letter"+le.getText());
 			}
 		}catch(SQLException e) {
             e.printStackTrace();
@@ -83,4 +84,76 @@ public class LetterDao {
 		
 		return letters;
 	}
+	//找到所有有通讯往来的大学生
+	public List<Integer> findcollegeRosterByTalkersid (int userid, int usertype ){
+		//建立与数据库的连接
+		Connection conn=DataBaseUtil.getConnection();
+		List<Integer> Roster=new ArrayList<Integer>();
+		try {
+
+				//查询语句，根据学号查询
+				String sql=""+"select * from letter where (senderid = ? and sendertype = ?) or (receiverid = ?  and receivertype =?) order by time";
+				PreparedStatement psmt = conn.prepareStatement(sql);
+				
+				psmt.setInt(1, userid);
+				psmt.setInt(2, 1);
+				psmt.setInt(3, userid);
+				psmt.setInt(4, 1);
+				
+				//执行查询语句
+			
+				ResultSet rs = psmt.executeQuery();
+				
+			
+				while (rs.next()) {
+					if (rs.getInt("senderid")!=userid)		
+					Roster.add(rs.getInt("senderid"));
+					else
+					Roster.add(rs.getInt("receiverid"));
+				}
+				
+					//System.out.println("letter"+le.getText());
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		return Roster;
+	}
+	
+	//找到所有有通讯往来的高中生
+public List<Integer> findhighschoolRosterByTalkersid (int userid, int usertype ){
+	//建立与数据库的连接
+	Connection conn=DataBaseUtil.getConnection();
+	List<Integer> Roster=new ArrayList<Integer>();
+	try {
+
+			//查询语句，根据学号查询
+			String sql=""+"select * from letter where (senderid = ? and sendertype = ?) or (receiverid = ?  and receivertype =?) order by time";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			
+			psmt.setInt(1, userid);
+			psmt.setInt(2, 0);
+			psmt.setInt(3, userid);
+			psmt.setInt(4, 0);
+			
+			//执行查询语句
+		
+			ResultSet rs = psmt.executeQuery();
+			
+		
+			while (rs.next()) {
+				if (rs.getInt("senderid")!=userid)		
+				Roster.add(rs.getInt("senderid"));
+				else
+				Roster.add(rs.getInt("receiverid"));
+			}
+			
+				//System.out.println("letter"+le.getText());
+	}catch(SQLException e) {
+        e.printStackTrace();
+    }finally {
+        DataBaseUtil.closeConnection(conn);
+    }
+	return Roster;
 }
