@@ -29,7 +29,41 @@ public class HighschoolstudentDao {
             DataBaseUtil.closeConnection(conn);
         }
 	}
-	
+		//通过id返回hs对象
+	public static Highschoolstudent findHighschoolstudentByHsid(String hsid) {
+		//建立一个Highschoolstudent对象
+		Highschoolstudent hs=new Highschoolstudent();
+		//建立数据库连接
+		Connection conn=DataBaseUtil.getConnection();
+
+		try {
+			//查询语句，根据账号查询
+			String sql=""+"select * from highschoolstudent where hsid = ?";
+			PreparedStatement psmt = conn.prepareStatement(sql);
+			psmt.setString(1, hsid);
+			//执行查询语句
+			ResultSet rs = psmt.executeQuery();
+			if (rs.next()) {
+				//给comment对象设定id等属性值
+				hs.setHspassword(rs.getString("hspassword"));
+				hs.setHsname(rs.getString("hsname"));
+				hs.setHsphone(rs.getString("hsphone"));
+				hs.setHssex(rs.getInt("hssex"));
+				hs.setHsregion(rs.getString("hsregion"));
+				hs.setHsgaokao_year(rs.getInt("hsgaokao_year"));
+				hs.setHschoice(rs.getString("hschoice"));
+				
+			}
+		}catch(SQLException e) {
+            e.printStackTrace();
+        }catch(NullPointerException f){
+            f.printStackTrace();
+        }finally {
+            DataBaseUtil.closeConnection(conn);
+        }
+		//返回Highschoolstudent对象
+		return hs;
+	}
 
 	public static Highschoolstudent findHighschoolstudentByHsid(int hsid) {
 		//建立一个Highschoolstudent对象
